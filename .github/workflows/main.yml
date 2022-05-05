@@ -1,12 +1,13 @@
-name: build-deploy
+name: build-push-deploy
 
 on:
   push:
     branches:
       - "main"
+      - "develop"
 
 jobs:
-  build-push-deploy:
+  build-push:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -42,8 +43,9 @@ jobs:
           deployment_mode: docker-compose
           args: up -d
           deploy_path: /home/ubuntu/tum4health-cms
-          stack_file_name: docker-compose.yml
+          stack_file_name: docker-compose.deploy.yml
           copy_stack_file: true
           keep_files: 5
           docker_prune: "false"
           pull_images_first: "true"
+    needs: build-push
