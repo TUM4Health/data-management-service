@@ -53,8 +53,9 @@ jobs:
           key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            cd tum4health-cms
             docker-compose -f docker-compose.deploy.yml down
-            docker system prune
+            docker system prune --force
             docker-compose pull
             docker-compose -f docker-compose.deploy.yml up -d
     needs: build-push
