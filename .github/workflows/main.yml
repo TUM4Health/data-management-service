@@ -27,6 +27,12 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: philippzagar/tum4health_cms:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Deploy
         uses: wshihadeh/docker-deployment-action@v1
         with:
@@ -34,8 +40,10 @@ jobs:
           ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
           deployment_mode: docker-compose
-          deploy_path: /home/ubuntu/tum4health-cms
           args: up -d
-          pre_deployment_command_args: "bundle exec rake db:migrate"
-          # docker_prune: "true"
+          deploy_path: /home/ubuntu/tum4health-cms
+          stack_file_name: docker-compose.yml
+          copy_stack_file: true
+          keep_files: 5
+          docker_prune: "false"
           pull_images_first: "true"
