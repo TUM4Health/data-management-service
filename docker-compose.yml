@@ -20,8 +20,8 @@ services:
     volumes:
       - ./config:/opt/app/config
       - ./src:/opt/app/src
-      # - ./package.json:/opt/package.json
-      # - ./yarn.lock:/opt/yarn.lock
+      - ./package.json:/opt/package.json
+      - ./yarn.lock:/opt/yarn.lock
       - ./.env:/opt/app/.env
     ports:
       - "1337:1337"
