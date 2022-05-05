@@ -43,7 +43,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          source: "docker-compose.deploy.yml,.env"
+          source: "docker-compose.deploy.yml"
           target: "/home/ubuntu/tum4health-cms/"
       - name: Deploy
         uses: appleboy/ssh-action@master
