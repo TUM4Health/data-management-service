@@ -9,12 +9,12 @@ WORKDIR /opt/
 COPY ./package.json ./
 COPY ./yarn.lock ./
 ENV PATH /opt/node_modules/.bin:$PATH
-RUN npm install
+RUN npm i
 
 WORKDIR /opt/app
 COPY ./ .
 
-RUN npm build
+RUN npm run build
 
 EXPOSE 1337
 CMD ["npm", "run", "develop"]

@@ -5,8 +5,8 @@ module.exports = [
     config: {
       contentSecurityPolicy: {
         directives: {
-          'script-src': ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
-          'img-src': ["'self'", 'data:', 'cdn.jsdelivr.net', 'strapi.io', `130.61.218.40`],
+          'script-src': ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net', '130.61.218.40'],
+          'img-src': ["'self'", 'data:', 'cdn.jsdelivr.net', 'strapi.io', '130.61.218.40'],
         },
       }
     },
