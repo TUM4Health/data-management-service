@@ -37,5 +37,5 @@ jobs:
           deploy_path: /home/ubuntu/tum4health-cms
           args: up -d
           pre_deployment_command_args: "bundle exec rake db:migrate"
-          docker_prune: "true"
+          # docker_prune: "true"
           pull_images_first: "true"
