@@ -48,6 +48,6 @@ jobs:
           stack_file_name: docker-compose.deploy.yml
           copy_stack_file: true
           keep_files: 5
-          docker_prune: "false"
+          docker_prune: "true"
           pull_images_first: "true"
     needs: build-push
