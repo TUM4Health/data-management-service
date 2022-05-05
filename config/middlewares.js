@@ -1,19 +1,16 @@
 module.exports = [
   'strapi::errors',
-  // {
-  //   name: 'strapi::security',
-  //   config: {
-  //     contentSecurityPolicy: {
-  //       useDefaults: true,
-  //       directives: {
-  //         'connect-src': ["'self'", 'http:'],
-  //         'img-src': ["'self'", 'data:', 'blob:', `http://130.61.218.40/`],
-  //         'media-src': ["'self'", 'data:', 'blob:', `http://130.61.218.40/`],
-  //         upgradeInsecureRequests: null,
-  //       },
-  //     },
-  //   },
-  // },
+  {
+    name: 'strapi::security',
+    config: {
+      contentSecurityPolicy: {
+        directives: {
+          'script-src': ["'self'", "'unsafe-inline'", 'cdn.jsdelivr.net'],
+          'img-src': ["'self'", 'data:', 'cdn.jsdelivr.net', 'strapi.io', `130.61.218.40`],
+        },
+      }
+    },
+  },
   'strapi::cors',
   'strapi::poweredBy',
   'strapi::logger',
