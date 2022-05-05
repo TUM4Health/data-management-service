@@ -25,3 +25,14 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: philippzagar/tum4health_cms:latest
+      - name: Deploy to Docker swarm
+        uses: wshihadeh/docker-deployment-action@v1
+        with:
+          remote_docker_host: "ubuntu@130.61.218.40"
+          ssh_private_key: ${{ secrets.DOCKER_SSH_PRIVATE_KEY }}
+          ssh_public_key: ${{ secrets.DOCKER_SSH_PUBLIC_KEY }}
+          deployment_mode: docker-compose
+          deploy_path: /home/ubuntu/tum4health-cms
+          stack_file_name: docker-compose.yml
+          keep_files: 3
+          args: up
