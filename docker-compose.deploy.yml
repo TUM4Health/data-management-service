@@ -2,7 +2,7 @@ version: "3"
 services:
   strapi:
     container_name: tum4health_cms
-    image: tum4health_cms:latest
+    image: philippzagar/tum4health_cms:latest
     restart: unless-stopped
     env_file: .env
     environment:
