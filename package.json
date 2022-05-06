@@ -7,6 +7,7 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "build": "strapi build",
+    "install-documentation": "strapi install documentation",
     "strapi": "strapi"
   },
   "devDependencies": {},

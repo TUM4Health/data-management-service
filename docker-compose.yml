@@ -18,17 +18,18 @@ services:
     links:
       - postgres:postgres
     volumes:
-      - ./config:/opt/app/config
-      - ./src:/opt/app/src
-      - ./package.json:/opt/package.json
+      - ./config:/app/config
+      - ./src:/app/src
+      - ./package.json:/app/package.json
       - ./package-lock.json:/opt/package-lock.json
-      - ./.env:/opt/app/.env
+      - ./.env:/app/.env
     ports:
       - "1337:1337"
     networks:
       - strapi
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   postgres:
     image: postgres:14.2-alpine
@@ -43,6 +44,15 @@ services:
       - ./data:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -d $${DATABASE_NAME} -U $${DATABASE_USERNAME}"
+        ]
+      interval: 3s
+      timeout: 3s
+      retries: 5
     networks:
       - strapi
 
