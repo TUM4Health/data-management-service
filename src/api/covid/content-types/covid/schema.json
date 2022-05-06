@@ -1,10 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "sport_events",
+  "collectionName": "covids",
   "info": {
-    "singularName": "sport-event",
-    "pluralName": "sport-events",
-    "displayName": "Sport-Event",
+    "singularName": "covid",
+    "pluralName": "covids",
+    "displayName": "Covid",
     "description": ""
   },
   "options": {
@@ -22,7 +22,8 @@
           "localized": true
         }
       },
-      "type": "string"
+      "type": "string",
+      "required": true
     }
   }
 }

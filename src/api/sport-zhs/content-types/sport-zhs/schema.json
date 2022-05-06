@@ -1,11 +1,10 @@
 {
   "kind": "collectionType",
-  "collectionName": "sport_events",
+  "collectionName": "sport_zhss",
   "info": {
-    "singularName": "sport-event",
-    "pluralName": "sport-events",
-    "displayName": "Sport-Event",
-    "description": ""
+    "singularName": "sport-zhs",
+    "pluralName": "sport-zhss",
+    "displayName": "Sport-ZHS"
   },
   "options": {
     "draftAndPublish": true
@@ -22,7 +21,8 @@
           "localized": true
         }
       },
-      "type": "string"
+      "type": "string",
+      "required": true
     }
   }
 }

@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/sport-events": {
+    "/sport-zhs-offerings": {
       "get": {
         "responses": {
           "200": {
@@ -20,7 +20,17 @@
                           "attributes": {
                             "type": "object",
                             "properties": {
+                              "date": {
+                                "type": "string",
+                                "format": "date-time"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
                               "description": {
+                                "type": "string"
+                              },
+                              "content": {
                                 "type": "string"
                               },
                               "createdAt": {
@@ -334,7 +344,17 @@
                                         "attributes": {
                                           "type": "object",
                                           "properties": {
+                                            "date": {
+                                              "type": "string",
+                                              "format": "date-time"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            },
                                             "description": {
+                                              "type": "string"
+                                            },
+                                            "content": {
                                               "type": "string"
                                             },
                                             "createdAt": {
@@ -596,7 +616,7 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs-offering"
         ],
         "parameters": [
           {
@@ -680,7 +700,7 @@
             }
           }
         ],
-        "operationId": "get/sport-events"
+        "operationId": "get/sport-zhs-offerings"
       },
       "post": {
         "responses": {
@@ -699,7 +719,17 @@
                         "attributes": {
                           "type": "object",
                           "properties": {
+                            "date": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
                             "description": {
+                              "type": "string"
+                            },
+                            "content": {
                               "type": "string"
                             },
                             "createdAt": {
@@ -1013,7 +1043,17 @@
                                       "attributes": {
                                         "type": "object",
                                         "properties": {
+                                          "date": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          },
                                           "description": {
+                                            "type": "string"
+                                          },
+                                          "content": {
                                             "type": "string"
                                           },
                                           "createdAt": {
@@ -1254,10 +1294,10 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs-offering"
         ],
         "parameters": [],
-        "operationId": "post/sport-events",
+        "operationId": "post/sport-zhs-offerings",
         "requestBody": {
           "required": true,
           "content": {
@@ -1267,58 +1307,17 @@
                   "data": {
                     "type": "object",
                     "properties": {
+                      "date": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
                       "description": {
                         "type": "string"
                       },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "updatedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "publishedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "createdBy": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
-                      },
-                      "updatedBy": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
-                      },
-                      "localizations": {
-                        "type": "array",
-                        "items": {
-                          "oneOf": [
-                            {
-                              "type": "integer"
-                            },
-                            {
-                              "type": "string"
-                            }
-                          ],
-                          "example": "string or id"
-                        }
-                      },
-                      "locale": {
+                      "content": {
                         "type": "string"
                       }
                     }
@@ -1330,7 +1329,7 @@
         }
       }
     },
-    "/sport-events/{id}": {
+    "/sport-zhs-offerings/{id}": {
       "get": {
         "responses": {
           "200": {
@@ -1348,7 +1347,17 @@
                         "attributes": {
                           "type": "object",
                           "properties": {
+                            "date": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
                             "description": {
+                              "type": "string"
+                            },
+                            "content": {
                               "type": "string"
                             },
                             "createdAt": {
@@ -1662,7 +1671,17 @@
                                       "attributes": {
                                         "type": "object",
                                         "properties": {
+                                          "date": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          },
                                           "description": {
+                                            "type": "string"
+                                          },
+                                          "content": {
                                             "type": "string"
                                           },
                                           "createdAt": {
@@ -1903,7 +1922,7 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs-offering"
         ],
         "parameters": [
           {
@@ -1917,7 +1936,7 @@
             }
           }
         ],
-        "operationId": "get/sport-events/{id}"
+        "operationId": "get/sport-zhs-offerings/{id}"
       },
       "put": {
         "responses": {
@@ -1936,7 +1955,17 @@
                         "attributes": {
                           "type": "object",
                           "properties": {
+                            "date": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
                             "description": {
+                              "type": "string"
+                            },
+                            "content": {
                               "type": "string"
                             },
                             "createdAt": {
@@ -2250,7 +2279,17 @@
                                       "attributes": {
                                         "type": "object",
                                         "properties": {
+                                          "date": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          },
                                           "description": {
+                                            "type": "string"
+                                          },
+                                          "content": {
                                             "type": "string"
                                           },
                                           "createdAt": {
@@ -2491,7 +2530,7 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs-offering"
         ],
         "parameters": [
           {
@@ -2505,7 +2544,7 @@
             }
           }
         ],
-        "operationId": "put/sport-events/{id}",
+        "operationId": "put/sport-zhs-offerings/{id}",
         "requestBody": {
           "required": true,
           "content": {
@@ -2515,7 +2554,17 @@
                   "data": {
                     "type": "object",
                     "properties": {
+                      "date": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
                       "description": {
+                        "type": "string"
+                      },
+                      "content": {
                         "type": "string"
                       },
                       "createdAt": {
@@ -2737,7 +2786,7 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs-offering"
         ],
         "parameters": [
           {
@@ -2751,10 +2800,10 @@
             }
           }
         ],
-        "operationId": "delete/sport-events/{id}"
+        "operationId": "delete/sport-zhs-offerings/{id}"
       }
     },
-    "/sport-events/{id}/localizations": {
+    "/sport-zhs-offerings/{id}/localizations": {
       "post": {
         "responses": {
           "200": {
@@ -2772,7 +2821,17 @@
                         "attributes": {
                           "type": "object",
                           "properties": {
+                            "date": {
+                              "type": "string",
+                              "format": "date-time"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
                             "description": {
+                              "type": "string"
+                            },
+                            "content": {
                               "type": "string"
                             },
                             "createdAt": {
@@ -3086,7 +3145,17 @@
                                       "attributes": {
                                         "type": "object",
                                         "properties": {
+                                          "date": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                          },
+                                          "name": {
+                                            "type": "string"
+                                          },
                                           "description": {
+                                            "type": "string"
+                                          },
+                                          "content": {
                                             "type": "string"
                                           },
                                           "createdAt": {
@@ -3327,7 +3396,7 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs-offering"
         ],
         "parameters": [
           {
@@ -3341,7 +3410,7 @@
             }
           }
         ],
-        "operationId": "post/sport-events/{id}/localizations",
+        "operationId": "post/sport-zhs-offerings/{id}/localizations",
         "requestBody": {
           "required": true,
           "content": {
@@ -3351,58 +3420,17 @@
                   "data": {
                     "type": "object",
                     "properties": {
+                      "date": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
                       "description": {
                         "type": "string"
                       },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "updatedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "publishedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "createdBy": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
-                      },
-                      "updatedBy": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
-                      },
-                      "localizations": {
-                        "type": "array",
-                        "items": {
-                          "oneOf": [
-                            {
-                              "type": "integer"
-                            },
-                            {
-                              "type": "string"
-                            }
-                          ],
-                          "example": "string or id"
-                        }
-                      },
-                      "locale": {
+                      "content": {
                         "type": "string"
                       }
                     }

@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mental_healthcares",
+  "info": {
+    "singularName": "mental-healthcare",
+    "pluralName": "mental-healthcares",
+    "displayName": "MentalHealthcare",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titleImage": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "headline": {
+      "type": "string",
+      "required": true
+    },
+    "subhead": {
+      "type": "text",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

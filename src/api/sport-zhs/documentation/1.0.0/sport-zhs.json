@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/sport-events": {
+    "/sport-zhss": {
       "get": {
         "responses": {
           "200": {
@@ -596,7 +596,7 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs"
         ],
         "parameters": [
           {
@@ -680,7 +680,7 @@
             }
           }
         ],
-        "operationId": "get/sport-events"
+        "operationId": "get/sport-zhss"
       },
       "post": {
         "responses": {
@@ -1254,10 +1254,10 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs"
         ],
         "parameters": [],
-        "operationId": "post/sport-events",
+        "operationId": "post/sport-zhss",
         "requestBody": {
           "required": true,
           "content": {
@@ -1269,57 +1269,6 @@
                     "properties": {
                       "description": {
                         "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "updatedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "publishedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "createdBy": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
-                      },
-                      "updatedBy": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
-                      },
-                      "localizations": {
-                        "type": "array",
-                        "items": {
-                          "oneOf": [
-                            {
-                              "type": "integer"
-                            },
-                            {
-                              "type": "string"
-                            }
-                          ],
-                          "example": "string or id"
-                        }
-                      },
-                      "locale": {
-                        "type": "string"
                       }
                     }
                   }
@@ -1330,7 +1279,7 @@
         }
       }
     },
-    "/sport-events/{id}": {
+    "/sport-zhss/{id}": {
       "get": {
         "responses": {
           "200": {
@@ -1903,7 +1852,7 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs"
         ],
         "parameters": [
           {
@@ -1917,7 +1866,7 @@
             }
           }
         ],
-        "operationId": "get/sport-events/{id}"
+        "operationId": "get/sport-zhss/{id}"
       },
       "put": {
         "responses": {
@@ -2491,7 +2440,7 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs"
         ],
         "parameters": [
           {
@@ -2505,7 +2454,7 @@
             }
           }
         ],
-        "operationId": "put/sport-events/{id}",
+        "operationId": "put/sport-zhss/{id}",
         "requestBody": {
           "required": true,
           "content": {
@@ -2737,7 +2686,7 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs"
         ],
         "parameters": [
           {
@@ -2751,10 +2700,10 @@
             }
           }
         ],
-        "operationId": "delete/sport-events/{id}"
+        "operationId": "delete/sport-zhss/{id}"
       }
     },
-    "/sport-events/{id}/localizations": {
+    "/sport-zhss/{id}/localizations": {
       "post": {
         "responses": {
           "200": {
@@ -3327,7 +3276,7 @@
           }
         },
         "tags": [
-          "Sport-event"
+          "Sport-zhs"
         ],
         "parameters": [
           {
@@ -3341,7 +3290,7 @@
             }
           }
         ],
-        "operationId": "post/sport-events/{id}/localizations",
+        "operationId": "post/sport-zhss/{id}/localizations",
         "requestBody": {
           "required": true,
           "content": {
@@ -3352,57 +3301,6 @@
                     "type": "object",
                     "properties": {
                       "description": {
-                        "type": "string"
-                      },
-                      "createdAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "updatedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "publishedAt": {
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "createdBy": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
-                      },
-                      "updatedBy": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
-                      },
-                      "localizations": {
-                        "type": "array",
-                        "items": {
-                          "oneOf": [
-                            {
-                              "type": "integer"
-                            },
-                            {
-                              "type": "string"
-                            }
-                          ],
-                          "example": "string or id"
-                        }
-                      },
-                      "locale": {
                         "type": "string"
                       }
                     }
