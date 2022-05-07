@@ -4301,17 +4301,6 @@
                       "articleText": {
                         "type": "string"
                       },
-                      "titleImage": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
-                      },
                       "date": {
                         "type": "string",
                         "format": "date"
@@ -10932,17 +10921,6 @@
                       },
                       "articleText": {
                         "type": "string"
-                      },
-                      "titleImage": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
                       },
                       "date": {
                         "type": "string",

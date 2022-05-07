@@ -4964,17 +4964,6 @@
                           "doctor",
                           "mental healthcare"
                         ]
-                      },
-                      "icon": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
                       }
                     }
                   }
@@ -12610,17 +12599,6 @@
                           "doctor",
                           "mental healthcare"
                         ]
-                      },
-                      "icon": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
                       }
                     }
                   }

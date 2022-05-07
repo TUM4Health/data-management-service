@@ -2777,17 +2777,6 @@
                       "description": {
                         "type": "string"
                       },
-                      "icon": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
-                      },
                       "content": {
                         "type": "string"
                       }
@@ -7099,17 +7088,6 @@
                       },
                       "description": {
                         "type": "string"
-                      },
-                      "icon": {
-                        "oneOf": [
-                          {
-                            "type": "integer"
-                          },
-                          {
-                            "type": "string"
-                          }
-                        ],
-                        "example": "string or id"
                       },
                       "content": {
                         "type": "string"
