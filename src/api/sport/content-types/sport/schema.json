@@ -47,10 +47,28 @@
       "type": "string",
       "required": true
     },
-    "sport_zhs": {
+    "icon": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "zhs": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::sport-zhs.sport-zhs"
+      "relation": "oneToOne",
+      "target": "api::zhs.zhs"
+    },
+    "sport_event": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::sport-event.sport-event"
     }
   }
 }

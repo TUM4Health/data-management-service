@@ -60,6 +60,19 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::covid.covid"
+    },
+    "icon": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true
     }
   }
 }
