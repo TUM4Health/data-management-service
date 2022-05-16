@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "zhs_sports_tests",
+  "info": {
+    "singularName": "zhs-sports-test",
+    "pluralName": "zhs-sports-tests",
+    "displayName": "ZHSSportsTest",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "weekday": {
+      "type": "string"
+    },
+    "time": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "offeringDates": {
+      "type": "string"
+    },
+    "price": {
+      "type": "string"
+    },
+    "bookable": {
+      "type": "boolean"
+    },
+    "bookingLink": {
+      "type": "string"
+    },
+    "scraper": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::scraper.scraper",
+      "inversedBy": "zhs_sports_tests"
+    }
+  }
+}

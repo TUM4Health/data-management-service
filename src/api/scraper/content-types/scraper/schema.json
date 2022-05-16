@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "scrapers",
+  "info": {
+    "singularName": "scraper",
+    "pluralName": "scrapers",
+    "displayName": "Scraper"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "error": {
+      "type": "json"
+    },
+    "report": {
+      "type": "json"
+    },
+    "frequency": {
+      "type": "string"
+    },
+    "next_execution_at": {
+      "type": "string"
+    },
+    "zhs_sports_tests": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::zhs-sports-test.zhs-sports-test",
+      "mappedBy": "scraper"
+    }
+  }
+}
