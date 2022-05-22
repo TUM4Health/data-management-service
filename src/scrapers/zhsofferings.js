@@ -34,15 +34,11 @@ const scrape = async (allSG, scraper) => {
 
         let $ = cheerio.load(res.data);
         // All sport types name
-        const sportTypeNames = $('#bs_content > dl > dd').toArray().map(element => {
-            return $(element).text()
-        })
+        const sportTypeNames = $('#bs_content > dl > dd').toArray().map(element => $(element).text())
         // All links to the sport pages
-        let links = $('#bs_content > dl > dd').toArray().map(element => {
-            return $(element).children().attr("href")
-        })
+        let links = $('#bs_content > dl > dd').toArray().map(element => $(element).children().attr("href"))
 
-        // TODO: Only for dev purposes
+        // TODO: Only for dev purposes -> change above variable to const then
         links = links.splice(0, 1)
 
         // Go through every sport type and fetch more details
@@ -66,9 +62,7 @@ const scrape = async (allSG, scraper) => {
                         turndownService.turndown(
                             $(element)
                                 .find('.bs_kursbeschreibung .bslang_de')
-                                .map((i, element) => {
-                                    return $(element).html()
-                                })
+                                .map((i, element) => $(element).html())
                                 .get()
                                 .join(EOL)
                         )
@@ -79,9 +73,7 @@ const scrape = async (allSG, scraper) => {
                         turndownService.turndown(
                             $(element)
                                 .find('.bs_kursbeschreibung .bslang_en')
-                                .map(function (i, element) {
-                                    return $(element).html()
-                                })
+                                .map((i, element) => $(element).html())
                                 .get()
                                 .join(EOL)
                         )
@@ -106,9 +98,9 @@ const scrape = async (allSG, scraper) => {
                                 const scriptTag = $('head > script:contains("//<![CDATA[")')
                                     .html()
                                     .trim()
-                                    .split(/(?=\[\[)/g)[1]
-                                    .split("]]")[0]
-                                    .concat("]]")
+                                    .split(/(?=\[\[)/g)[1]  // doesnt remove the delimiter
+                                    .split("]]")[0]    // here no other option than removing the delimiter
+                                    .concat("]]")   // add closing delimiter again
 
                                 const locationData = JSON.parse(htmlentities.decode(scriptTag))
                                 const respectiveLocationData = locationData[0]
