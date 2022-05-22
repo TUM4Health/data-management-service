@@ -46,6 +46,12 @@
         }
       },
       "type": "float"
+    },
+    "zhs_sport_courses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::zhs-sport-course.zhs-sport-course",
+      "mappedBy": "zhs_sport_location"
     }
   }
 }

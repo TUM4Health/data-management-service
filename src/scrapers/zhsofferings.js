@@ -14,7 +14,10 @@ const {
     scraperCanRun
 } = require('./utils/utils.js')
 const {
-    createSiteGenerators,
+    createZHSSports,
+    createZHSSportsCourse,
+    createZHSSportsCourseEvent,
+    createZHSLocation,
     updateScraper
 } = require('./utils/query.js')
 

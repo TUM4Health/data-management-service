@@ -173,6 +173,12 @@
       "relation": "oneToMany",
       "target": "api::zhs-sport-course-event.zhs-sport-course-event",
       "mappedBy": "zhs_sport_course"
+    },
+    "zhs_sport_location": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::zhs-sport-location.zhs-sport-location",
+      "inversedBy": "zhs_sport_courses"
     }
   }
 }
