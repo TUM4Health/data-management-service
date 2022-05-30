@@ -6,6 +6,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const htmlentities = require('html-entities');
 const TurndownService = require('turndown');
+const http = require('http');
 
 const {
     getReport,
@@ -14,10 +15,14 @@ const {
     scraperCanRun
 } = require('./utils/utils.js')
 const {
-    createZHSSports,
-    createZHSSportsCourse,
+    createZHSSport,
+    createZHSSportCourse,
+    addRelationZHSSportCourse,
+    createZHSSportCourseOffering,
+    addRelationZHSSportCourseOffering,
+    createZHSSportCourseCost,
     createZHSSportsCourseEvent,
-    createZHSLocation,
+    createZHSSportLocation,
     updateScraper
 } = require('./utils/query.js')
 
@@ -28,164 +33,315 @@ let newZHSSports = 0
 // Stopped here -> continue here with the adaptions -> important to differentiate between old and new data
 const scrape = async (allSG, scraper) => {
     // Base URL 
-    const baseUrl = "https://www.buchung.zhs-muenchen.de/angebote/aktueller_zeitraum_0/"
+    const baseUrl = "https://www.buchung.zhs-muenchen.de/"
+    // Base Sports URL
+    const baseSportsUrl = baseUrl + "angebote/aktueller_zeitraum_0/"
     // Library in order to convert HTML to Markdown
     var turndownService = new TurndownService()
 
+    const instance = axios.create({
+        baseURL: '/',
+        timeout: 30000,
+        httpAgent: new http.Agent({ keepAlive: true }),
+    });
+
+    const MAX_REQUESTS_COUNT = 5
+    const INTERVAL_MS = 100
+    let PENDING_REQUESTS = 0
+
+    /**
+     * Axios Request Interceptor
+     */
+    instance.interceptors.request.use(function (config) {
+        console.log("test")
+        return new Promise((resolve, reject) => {
+            let interval = setInterval(() => {
+                if (PENDING_REQUESTS < MAX_REQUESTS_COUNT) {
+                    PENDING_REQUESTS++
+                    clearInterval(interval)
+                    resolve(config)
+                }
+            }, INTERVAL_MS)
+        })
+    })
+    /**
+     * Axios Response Interceptor
+     */
+    instance.interceptors.response.use(function (response) {
+        PENDING_REQUESTS = Math.max(0, PENDING_REQUESTS - 1)
+        return Promise.resolve(response)
+    }, function (error) {
+        PENDING_REQUESTS = Math.max(0, PENDING_REQUESTS - 1)
+        return Promise.reject(error)
+    })
+
     try {
-        const res = await axios.get(baseUrl);
+        let res = await instance.get(baseSportsUrl);
 
         let $ = cheerio.load(res.data);
         // All sport types name
         const sportTypeNames = $('#bs_content > dl > dd').toArray().map(element => $(element).text())
         // All links to the sport pages
-        let links = $('#bs_content > dl > dd').toArray().map(element => $(element).children().attr("href"))
+        let sportLinks = $('#bs_content > dl > dd').toArray().map(element => baseSportsUrl + $(element).children().attr("href"))
 
         // TODO: Only for dev purposes -> change above variable to const then
-        links = links.splice(0, 1)
+        sportLinks = sportLinks.splice(0, 20)
 
         // Go through every sport type and fetch more details
-        links.forEach(async (link) => {
-            try {
-                const sportsUrl = baseUrl + link
-                const res = await axios.get(sportsUrl);
+        sportLinks.forEach(async (sportLink, i) => {
+            let res = await instance.get(sportLink);
 
+            let $ = cheerio.load(res.data);
+
+            // Course headings
+            let sportHeadingGerman = $('.bs_head').text()
+            let sportHeadingEnglish = $('.bs_kursbeschreibung .bslang_en span strong').map((i, element) => {
+                if ($(element).parent().css('font-size') == '14px') {
+                    return $(element).text()
+                }
+            })?.[0]
+            sportHeadingEnglish = (sportHeadingEnglish == undefined) ? sportHeadingGerman : sportHeadingEnglish
+
+            const sportID = await createZHSSport(
+                {
+                    name: sportHeadingGerman,
+                    link: sportLink
+                },
+                {
+                    name: sportHeadingEnglish,
+                },
+                scraper
+            )
+
+            // Differentiate between different offerings for one sport (eg. lecture free period, other events etc)
+            $('.bs_angblock').map(async (i, element) => {
                 let $ = cheerio.load(res.data);
 
-                // Course headings
-                let courseHeadingGerman = $('.bs_head').text()
-                console.log(courseHeadingGerman)
-                let courseHeadingEnglishElement = $('.bs_kursbeschreibung .bslang_en strong')[0]    // Not always the case, eg. when German and English name is the same the English name isn't displayed at all -> How to filter?
-                let courseHeadingEnglish = $(courseHeadingEnglishElement).text()
-                console.log(courseHeadingEnglish)
+                let sportDescriptionGerman =
+                    turndownService.turndown(
+                        $(element)
+                            .find('.bs_kursbeschreibung .bslang_de')
+                            .map((i, element) => $(element).html())
+                            .get()
+                            .join(EOL)
+                    ).trim()
+                //console.log(sportDescriptionGerman)
 
-                // Differentiate between different offerings for one sport (eg. lecture free period, other events etc)
-                $('.bs_angblock').map(async (i, element) => {
-                    let courseDescriptionGermanMarkdown =
-                        turndownService.turndown(
-                            $(element)
-                                .find('.bs_kursbeschreibung .bslang_de')
-                                .map((i, element) => $(element).html())
-                                .get()
-                                .join(EOL)
+                let sportDescriptionEnglish =
+                    turndownService.turndown(
+                        $(element)
+                            .find('.bs_kursbeschreibung .bslang_en')
+                            .map((i, element) => $(element).html())
+                            .get()
+                            .join(EOL)
+                    ).trim()
+                //console.log(sportDescriptionEnglish)
+
+                const sportCourseID = await createZHSSportCourse(
+                    {
+                        heading: sportHeadingGerman,
+                        description: sportDescriptionGerman,
+                    },
+                    {
+                        heading: sportHeadingEnglish,
+                        description: sportDescriptionEnglish,
+                    },
+                    {
+                        zhs_sport: [sportID]
+                    },
+                    scraper
+                )
+
+                $(element).find('div.bs_kursangebot > table > tbody > tr').map(async (i, element) => {     // Each in order to properly go through each element
+                    const courseNumber = $(element).find('td.bs_sknr').text();
+                    const details = $(element).find('td.bs_sdet').text();
+                    const day = $(element).find('td.bs_stag').text();
+                    const time = $(element).find('td.bs_szeit').text();
+                    const location = $(element).find('td.bs_sort').text();
+                    const locationLinkRoute = $(element).find('td.bs_sort > a').attr('href');
+                    const locationLink = baseUrl.slice(0, -1) + locationLinkRoute;
+                    const duration = $(element).find('td.bs_szr').text();
+                    // Details only avaiable in German
+                    const detailsViewLinkRoute = $(element).find('td.bs_szr a').attr('href')
+                    const detailsViewLink = baseUrl.slice(0, -1) + detailsViewLinkRoute
+                    const guidance = $(element).find('td.bs_skl').text();
+                    const bookingRawValue = $(element).find('td.bs_sbuch > input').val();
+                    const bookable = (bookingRawValue == 'buchen') ? true : false;
+                    let bookingLinkDetails;
+                    if (bookable) {
+                        const courseID = $(element).find('td.bs_sbuch > input').attr('name')
+                        bookingLinkDetails = {
+                            method: 'POST',
+                            link: baseUrl + 'cgi/anmeldung.fcgi',
+                            headers: {
+                                authority: 'www.buchung.zhs-muenchen.de',
+                                'cache-control': 'max-age=0',
+                                'content-type': 'application/x-www-form-urlencoded',
+                                origin: baseUrl,
+                                referer: sportLink
+                            },
+                            payload: courseID + '=buchen'
+                        }
+                    }
+
+                    const sportCourseOfferingID = await createZHSSportCourseOffering(
+                        {
+                            courseNumber: courseNumber,
+                            details: details,
+                            day: day,
+                            time: time,
+                            duration: duration,
+                            guidance: guidance,
+                            detailsViewLink: detailsViewLink,
+                            bookable: bookable,
+                            bookingLinkDetails: bookingLinkDetails
+                        }
+                    )
+
+                    const sportCourseRelationOfferingsID = await addRelationZHSSportCourse(
+                        sportCourseID,
+                        {
+                            zhs_sport_course_offerings: [sportCourseOfferingID]
+                        }
+                    )
+
+                    const costDetailedRaw = $(element).find('td.bs_spreis > div > div')
+                    let costDetailed, costStudents, costEmployee, costAssociationMember, costShort
+                    if (costDetailedRaw.text().length > 0) {
+                        costDetailed = $(costDetailedRaw).text()
+                        costStudents = $(costDetailedRaw).find('div:nth-child(1)').text()
+                        costEmployee = $(costDetailedRaw).find('div:nth-child(4)').text()
+                        costAssociationMember = $(costDetailedRaw).find('div:nth-child(7)').text()
+                        costShort = $(element).find('td.bs_spreis > div').children().remove().end().text().replace(/\s/g, '');
+                    } else {
+                        const costOnlyCardRaw = $(element).find('td.bs_spreis > span')
+                        costDetailed = costOnlyCardRaw.contents().first().text() + " " + costOnlyCardRaw.contents().last().text()
+                        costShort = costDetailed
+                    }
+                    const costOnlyCard = (costDetailed == 'nur mit Basic-Ticket') ? true : false
+
+                    const sportCourseCostID = await createZHSSportCourseCost(
+                        {
+                            costShort: costShort,
+                            costDetailed: costDetailed,
+                            costStudents: costStudents,
+                            costEmployee: costEmployee,
+                            costAssociationMember: costAssociationMember,
+                            costOnlyCard: costOnlyCard
+                        },
+                        {
+                            zhs_sport_course_offerings: [sportCourseOfferingID]
+                        }
+                    )
+
+                    if (locationLinkRoute != undefined) {
+                        //console.log(locationLink)
+                        let res = await instance.get(locationLink);
+                        //console.log(res.data)
+                        $ = cheerio.load(res.data);
+
+                        // Adress line of location page
+                        const bs_head = $('.bs_head') // First line of text
+                        const name = $(bs_head).text()
+                        const street = $(bs_head)[0].next.data.trim()
+                        const city = $(bs_head)[0].next.next.next.data.trim()
+                        let relevantLocationData = null
+
+                        if ($('head > script:contains("//<![CDATA[")').html() != null
+                            && $('head > script:contains("//<![CDATA[")').html() != '') {
+                            const scriptTag = $('head > script:contains("//<![CDATA[")')
+                                .html()
+                                .trim()
+                                .split(/(?=\[\[)/g)[1]  // doesnt remove the delimiter
+                                .split("]]")[0]    // here no other option than removing the delimiter
+                                .concat("]]")   // add closing delimiter again
+
+                            const locationData = JSON.parse(htmlentities.decode(scriptTag))
+                            //console.log(locationData)
+                            relevantLocationData = locationData[0]  // Currently active one is always displayed at the top
+                            //console.log(relevantLocationData)
+                        }
+
+                        const locationID = await createZHSSportLocation(
+                            {
+                                name: name,
+                                street: street,
+                                city: city,
+                                longitude: (relevantLocationData != null) ? relevantLocationData[0] : null,
+                                latitude: (relevantLocationData != null) ? relevantLocationData[1] : null,
+                                link: locationLink
+                            }
                         )
 
-                    console.log(courseDescriptionGermanMarkdown)
-
-                    let courseDescriptionEnglishMarkdown =
-                        turndownService.turndown(
-                            $(element)
-                                .find('.bs_kursbeschreibung .bslang_en')
-                                .map((i, element) => $(element).html())
-                                .get()
-                                .join(EOL)
+                        const sportCourseRelationLocationsID = await addRelationZHSSportCourseOffering(
+                            sportCourseOfferingID,
+                            {
+                                zhs_sport_location: [locationID]
+                            }
                         )
+                    }
 
-                    console.log(courseDescriptionEnglishMarkdown)
+                    //console.log(detailsViewLinkRoute)
+                    if (detailsViewLinkRoute != undefined) {
+                        res = await instance.get(detailsViewLink);
+                        $ = cheerio.load(res.data);
 
-                    $(element)
-                        .find('div.bs_kursangebot > table > tbody > tr').map(async (i, element) => {     // Each in order to properly go through each element
-                            const courseNumber = $(element).find('td.bs_sknr').text();
-                            const detail = $(element).find('td.bs_sdet').text();
-                            const day = $(element).find('td.bs_stag').text();
-                            const time = $(element).find('td.bs_szeit').text();
-                            const location = $(element).find('td.bs_sort').text();
-                            const locationLink = 'https://www.buchung.zhs-muenchen.de' + $(element).find('td.bs_sort > a').attr('href');
-                            const duration = $(element).find('td.bs_szr').text();
-                            const guideance = $(element).find('td.bs_skl').text();
+                        const sportCourseEventIDs = $('#bs_content > table > tbody > tr').toArray().map(async (element, i) => {
+                            const day = $(element).find('td:nth-child(1)').text();
+                            const date = $(element).find('td:nth-child(2)').text();
+                            const time = $(element).find('td:nth-child(3)').text();
+                            const location = $(element).find('td:nth-child(4)').text();
+                            //const placeLink = $(element).find('td:nth-child(4) > a').attr('href');
 
-                            try {
-                                const res = await axios.get(locationLink);
+                            const sportCourseEventID = await createZHSSportsCourseEvent(
+                                {
+                                    day: day,
+                                    date: date,
+                                    time: time,
+                                    location: location
+                                }
+                            )
 
-                                let $ = cheerio.load(res.data);
-                                const scriptTag = $('head > script:contains("//<![CDATA[")')
-                                    .html()
-                                    .trim()
-                                    .split(/(?=\[\[)/g)[1]  // doesnt remove the delimiter
-                                    .split("]]")[0]    // here no other option than removing the delimiter
-                                    .concat("]]")   // add closing delimiter again
+                            return sportCourseEventID
+                        })
 
-                                const locationData = JSON.parse(htmlentities.decode(scriptTag))
-                                const respectiveLocationData = locationData[0]
-                                console.log(respectiveLocationData[2])
-                            } catch (err) {
-                                // Handle Error Here
-                                console.error(err);
+                        await addRelationZHSSportCourseOffering(
+                            sportCourseOfferingID,
+                            {
+                                zhs_sport_course_events: await Promise.all(sportCourseEventIDs)
                             }
+                        )
+                    }
 
-                            const costDetailedRaw = $(element).find('td.bs_spreis > div > div')
-                            let costDetailed, costStudents, costEmployee, costAssociationMember, costShort, costOnlyCard
-                            if (costDetailedRaw.text().length > 0) {
-                                costDetailed = $(costDetailedRaw).text()
-                                costStudents = $(costDetailedRaw).find('div:nth-child(1)').text()
-                                costEmployee = $(costDetailedRaw).find('div:nth-child(4)').text()
-                                costAssociationMember = $(costDetailedRaw).find('div:nth-child(7)').text()
-                                costShort = $(element).find('td.bs_spreis > div').children().remove().end().text();
-                            } else {
-                                const costOnlyCardRaw = $(element).find('td.bs_spreis > span')
-                                costOnlyCard = costOnlyCardRaw.contents().first().text() + " " + costOnlyCardRaw.contents().last().text()
-                            }
+                    const lead = $('#bs_content > div:nth-child(20)').text();
+                    const place = $('#bs_content > div:nth-child(25)').text();
+                    const placeLink = $('#bs_content > div:nth-child(25) > a').attr('href');
+                    //console.log(lead)
+                    //console.log(place)
+                    //console.log(placeLink)
 
-                            const booking = $(element).find('td.bs_sbuch > input').val();
-
-                            // Details only avaiable in German
-                            const detailsViewLink = "https://www.buchung.zhs-muenchen.de" + $(element).find('td.bs_szr a').attr('href')
-
-                            try {
-                                const res = await axios.get(detailsViewLink);
-
-                                let $ = cheerio.load(res.data);
-
-
-                                $('#bs_content > table > tbody > tr').each((i, element) => {
-                                    const day = $(element).find('td:nth-child(1)').text();
-                                    const date = $(element).find('td:nth-child(2)').text();
-                                    const time = $(element).find('td:nth-child(3)').text();
-                                    const place = $(element).find('td:nth-child(4)').text();
-                                    const placeLink = $(element).find('td:nth-child(4) > a').attr('href');
-
-                                    // Properly bundle and return data here
-                                })
-
-                                const lead = $('#bs_content > div:nth-child(20)').text();
-                                const place = $('#bs_content > div:nth-child(25)').text();
-                                const placeLink = $('#bs_content > div:nth-child(25) > a').attr('href');
-                                console.log(lead)
-                                console.log(place)
-                                console.log(placeLink)
-                            } catch (err) {
-                                // Handle Error Here
-                                console.error(err);
-                            }
-
-                            const tableRow = {
-                                courseNumber,
-                                detail,
-                                day,
-                                time,
-                                location,
-                                duration,
-                                guideance,
-                                costDetailed,
-                                costStudents,
-                                costEmployee,
-                                costAssociationMember,
-                                costShort,
-                                costOnlyCard,
-                                booking,
-                                sportsUrl
-                            };
-                            console.log(tableRow)
-                        });
+                    const tableRow = {
+                        courseNumber,
+                        detail: details,
+                        day,
+                        time,
+                        location,
+                        duration,
+                        guidance,
+                        costDetailed,
+                        costStudents,
+                        costEmployee,
+                        costAssociationMember,
+                        costShort,
+                        costOnlyCard,
+                        booking: bookingRawValue,
+                        sportsUrl: sportLink
+                    };
+                    //console.log(tableRow)
                 });
-            } catch (err) {
-                // Handle Error Here
-                console.error(err);
-            }
+            });
         });
-
     } catch (err) {
-        // Handle Error Here
         console.error(err);
     }
 

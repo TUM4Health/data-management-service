@@ -1,0 +1,114 @@
+{
+  "kind": "collectionType",
+  "collectionName": "zhs_sport_course_offerings",
+  "info": {
+    "singularName": "zhs-sport-course-offering",
+    "pluralName": "zhs-sport-course-offerings",
+    "displayName": "ZHSSportCourseOffering",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "courseNumber": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "details": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "day": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "time": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "duration": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "guidance": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "detailsViewLink": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "text"
+    },
+    "bookable": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "boolean"
+    },
+    "zhs_sport_course": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::zhs-sport-course.zhs-sport-course",
+      "inversedBy": "zhs_sport_course_offerings"
+    },
+    "zhs_sport_course_events": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::zhs-sport-course-event.zhs-sport-course-event"
+    },
+    "zhs_sport_location": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::zhs-sport-location.zhs-sport-location"
+    },
+    "bookingLinkDetails": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "type": "json"
+    },
+    "zhs_sport_course_cost": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::zhs-sport-course-cost.zhs-sport-course-cost",
+      "inversedBy": "zhs_sport_course_offerings"
+    }
+  }
+}

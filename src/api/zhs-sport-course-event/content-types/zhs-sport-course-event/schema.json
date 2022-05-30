@@ -4,10 +4,11 @@
   "info": {
     "singularName": "zhs-sport-course-event",
     "pluralName": "zhs-sport-course-events",
-    "displayName": "ZHSSportCourseEvent"
+    "displayName": "ZHSSportCourseEvent",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {
     "i18n": {
@@ -46,12 +47,6 @@
         }
       },
       "type": "string"
-    },
-    "zhs_sport_course": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::zhs-sport-course.zhs-sport-course",
-      "inversedBy": "zhs_sport_course_events"
     }
   }
 }

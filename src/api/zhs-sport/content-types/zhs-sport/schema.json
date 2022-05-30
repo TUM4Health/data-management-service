@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {
     "i18n": {
@@ -27,15 +27,10 @@
     "link": {
       "pluginOptions": {
         "i18n": {
-          "localized": true
+          "localized": false
         }
       },
       "type": "string"
-    },
-    "zhs_sport_courses": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::zhs-sport-course.zhs-sport-course"
     }
   }
 }

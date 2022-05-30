@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "zhs_sport_course_costs",
+  "info": {
+    "singularName": "zhs-sport-course-cost",
+    "pluralName": "zhs-sport-course-costs",
+    "displayName": "ZHSSportCourseCost",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "costShort": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "costDetailed": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "costOnlyCard": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "boolean"
+    },
+    "zhs_sport_course_offerings": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::zhs-sport-course-offering.zhs-sport-course-offering",
+      "mappedBy": "zhs_sport_course_cost"
+    },
+    "costStudents": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "costEmployee": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "costAssociationMember": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    }
+  }
+}
