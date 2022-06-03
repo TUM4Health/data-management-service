@@ -112,6 +112,8 @@ exports
 *.cache
 build
 .strapi-updater.json
+# Documentation
+src/extensions/documentation    
 
 ############################
 # Postgres
