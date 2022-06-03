@@ -34,9 +34,11 @@ const scrape = async (scraper) => {
     // Base Sports URL
     const baseSportsUrl = baseUrl + "angebote/aktueller_zeitraum_0/"
     // Library in order to convert HTML to Markdown
-    var turndownService = new TurndownService()
+    let turndownService = new TurndownService()
     // Timestamp of beginning of scrape
     const beginScrapeTimestamp = new Date().toISOString();
+    // Indicates if any error happened during the scraping process
+    let success = true
 
     try {
         let res = await instance.get(baseSportsUrl);
@@ -332,11 +334,17 @@ const scrape = async (scraper) => {
         }));
     } catch (err) {
         console.error(err);
+        success = false
     }
 
-    // Clean up of old entries
-    const deletedEntries = await deleteOutdatedEntries(beginScrapeTimestamp, scraper)
-    console.log(`Deleted ${deletedEntries} outdated data entries`)
+    // Only cleanup if everything went well as there will be data deleted that wasn't updated
+    if (success) {
+        // Clean up of old entries
+        const deletedEntries = await deleteOutdatedEntries(beginScrapeTimestamp, scraper)
+        console.log(`Deleted ${deletedEntries} outdated data entries`)
+    } else {
+        console.log("No data was deleted as an error happend during fetching the data")
+    }
 }
 
 // Main scrape function that is executed via cron job
@@ -348,7 +356,7 @@ const mainScrape = async () => {
     });
 
     // If the scraper doesn't exists, is disabled or doesn't have a frequency then we do nothing
-    if (scraper == null || !scraper.enabled || !scraper.frequency || scraper.currentlyRunning) {
+    if (scraper == null || !scraper.enabled || !scraper.frequency) {
         console.log(`${chalk.red("Exit")}: (Your scraper ${slug} may does not exist, is not activated, does not have a frequency field filled in or is currently running)`);
         return
     }

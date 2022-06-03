@@ -1,4 +1,5 @@
 const axios = require('axios');
+const axiosRetry = require('axios-retry');
 const http = require('http');
 
 const MAX_REQUESTS_COUNT = 5
@@ -8,7 +9,7 @@ let PENDING_REQUESTS = 0
 // create new axios instance
 const instance = axios.create({
     baseURL: '/',
-    timeout: 30000,
+    timeout: 8000,
     httpAgent: new http.Agent({ keepAlive: true }),
 });
 
@@ -38,5 +39,13 @@ instance.interceptors.response.use(function (response) {
     return Promise.reject(error)
 })
 
+axiosRetry(instance, {
+    retries: 10,
+    retryDelay: (retryCount) => {
+        console.log(`Retry attempt: ${retryCount}`);
+        console.log(`Retry delay: ${retryCount * 2} sec`);
+        return retryCount * 2000; // time interval between retries
+    }
+});
 
 module.exports = instance
