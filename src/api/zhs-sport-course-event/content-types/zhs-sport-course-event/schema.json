@@ -40,13 +40,10 @@
       },
       "type": "string"
     },
-    "location": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "string"
+    "zhs_sport_location": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::zhs-sport-location.zhs-sport-location"
     }
   }
 }

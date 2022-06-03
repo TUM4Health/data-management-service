@@ -1,6 +1,9 @@
 'use strict';
 
-const zhsofferings = require('./scrapers/zhsofferings.js')
+const {
+  mainScrape,
+  mainScrapeCleanup
+} = require('./scrapers/zhsofferings.js')
 
 module.exports = {
   /**
@@ -19,6 +22,6 @@ module.exports = {
    * run jobs, or perform some special logic.
    */
   bootstrap({ strapi }) {
-    zhsofferings.main()
+    mainScrape() // TODO: Delete this once a proper cronjob is setted
   },
 };

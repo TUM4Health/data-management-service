@@ -16,32 +16,23 @@ const scraperCanRun = async (scraper) => {
     else {
         next_execution_at = (frequency.next().getTime() / 1000);
         await strapi.query('api::scraper.scraper').update({
-            id: scraper.id
-        }, {
-            next_execution_at: next_execution_at
+            where: { id: scraper.id },
+            data: {
+                next_execution_at: next_execution_at
+            }
         });
     }
 
     if (next_execution_at <= current_date) {
         await strapi.query('api::scraper.scraper').update({
-            id: scraper.id
-        }, {
-            next_execution_at: (frequency.next().getTime() / 1000)
+            where: { id: scraper.id },
+            data: {
+                next_execution_at: (frequency.next().getTime() / 1000)
+            }
         });
         return true
     }
     return false
-}
-
-const getAllZHSSports = async (scraper) => {
-    const existingZHSSports = await strapi.query('api::zhs-sports-test.zhs-sports-test').findMany({
-        _limit: 1000,
-        scraper: scraper.id
-    }, ["name"]);
-    const allZHSSports = existingZHSSports.map(x => x.name);
-    console.log(`ZHS Sports in database: \t${chalk.blue(allZHSSports.length)}`);
-
-    return allZHSSports;
 }
 
 const getDate = async () => {
@@ -193,6 +184,25 @@ const createOrUpdateEntriesMutex = async (relation, filterCriteria, data) => {
     }
 }
 
+const getEntry = async (relation, selector, selectedAttributes, populateRelations = []) => {
+    return await mutex.runExclusive(async () => {
+        return await getEntryMutex(relation, selector, selectedAttributes, populateRelations)
+    });
+}
+
+const getEntryMutex = async (relation, selector, selectedAttributes, populateRelations) => {
+    try {
+        const location = await strapi.db.query(relation).findOne({
+            select: selectedAttributes,
+            where: selector
+        });
+
+        return location?.id
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 const addRelationsToEntry = async (relation, filterCriteria, newDataRelations) => {
     return await mutex.runExclusive(async () => {
         return await addRelationsToEntryMutex(relation, filterCriteria, newDataRelations)
@@ -237,6 +247,10 @@ const addRelationsToEntryMutex = async (relation, filterCriteria, newDataRelatio
             return updatedEntry.id
         } else { // If it doesn't exists -> Create new entry
             console.log("Error while adding relations");
+            console.log(existingEntry)
+            console.log(relation)
+            console.log(newDataRelations)
+            console.log(filterCriteria)
         }
     } catch (e) {
         console.log(e);
@@ -270,4 +284,30 @@ const mergeRelationalData = (oldDataRelations, newDataRelations) => {
     return oldDataRelations;
 }
 
-module.exports = { getReport, getDate, getAllZHSSports, scraperCanRun, mergeJSONs, createOrUpdateEntriesLocalized, createOrUpdateEntries, addRelationsToEntry }
+const deleteEntries = async (relation, condition, scraper) => {
+    return await mutex.runExclusive(async () => {
+        return await deleteEntriesMutex(relation, condition, scraper)
+    });
+}
+
+const deleteEntriesMutex = async (relation, condition, scraper) => {
+    try {
+        return (await strapi.db.query(relation).deleteMany({
+            where: condition
+        })).count
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+module.exports = {
+    getReport,
+    getDate,
+    scraperCanRun,
+    mergeJSONs,
+    createOrUpdateEntriesLocalized,
+    createOrUpdateEntries,
+    getEntry,
+    addRelationsToEntry,
+    deleteEntries
+}

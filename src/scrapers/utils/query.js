@@ -1,12 +1,15 @@
 'use strict'
 
 const chalk = require('chalk')
+const scraper = require('../../api/scraper/controllers/scraper.js')
 
 const {
     createOrUpdateEntriesLocalized,
     createOrUpdateEntries,
+    getEntry,
     addRelationsToEntry,
-    mergeJSONs
+    mergeJSONs,
+    deleteEntries
 } = require('./utils.js')
 
 // Create the entire sports + links table + create relation to individual sport course
@@ -132,9 +135,9 @@ const createZHSSportCourseCost = async (data, relationData, scraper) => {
 }
 
 // Maybe create the event schedule in a different function as it creates another table entry (must be run after creation of course)
-const createZHSSportsCourseEvent = async (data, scraper) => {
+const createZHSSportsCourseEvent = async (data, relationData, scraper) => {
     try {
-        return await createOrUpdateEntries(
+        const entryID = await createOrUpdateEntries(
             'api::zhs-sport-course-event.zhs-sport-course-event',
             {
                 $and: [
@@ -146,13 +149,32 @@ const createZHSSportsCourseEvent = async (data, scraper) => {
                     },
                     {
                         time: data["time"],
-                    },
-                    {
-                        location: data["location"],
                     }
                 ],
             },
             data,
+        )
+
+        return await addRelationsToEntry(
+            'api::zhs-sport-course-event.zhs-sport-course-event',
+            {
+                id: entryID
+            },
+            relationData
+        )
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+const getZHSSportLocation = async (data, scraper) => {
+    try {
+        return await getEntry(
+            'api::zhs-sport-location.zhs-sport-location',
+            {
+                link: data["locationLink"],
+            },
+            ['id'],
         )
     } catch (e) {
         console.log(e);
@@ -166,7 +188,14 @@ const createZHSSportLocation = async (data, scraper) => {
         return await createOrUpdateEntries(
             'api::zhs-sport-location.zhs-sport-location',
             {
-                name: data["name"]
+                $and: [
+                    {
+                        name: data["name"],
+                    },
+                    {
+                        link: data["link"],
+                    }
+                ],
             },
             data,
         )
@@ -186,6 +215,36 @@ const updateScraper = async (scraper, report, errors) => {
     console.log(`Job done for: ${chalk.green(scraper.name)}`);
 }
 
+const deleteOutdatedEntries = async (beginScrapeTimestamp, scraper) => {
+    try {
+        const relations = [
+            'api::zhs-sport.zhs-sport',
+            'api::zhs-sport-course.zhs-sport-course',
+            'api::zhs-sport-course-offering.zhs-sport-course-offering',
+            'api::zhs-sport-location.zhs-sport-location',
+            'api::zhs-sport-course-event.zhs-sport-course-event',
+            'api::zhs-sport-course-cost.zhs-sport-course-cost'
+        ]
+
+        let deletedEntries = 0
+
+        for await (const relation of relations) {
+            deletedEntries += await deleteEntries(
+                relation,
+                {
+                    updated_at: {
+                        $lt: beginScrapeTimestamp,
+                    },
+                }
+            )
+        }
+
+        return deletedEntries
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 module.exports = {
     createZHSSport,
     createZHSSportCourse,
@@ -195,5 +254,7 @@ module.exports = {
     createZHSSportCourseCost,
     createZHSSportsCourseEvent,
     createZHSSportLocation,
+    getZHSSportLocation,
+    deleteOutdatedEntries,
     updateScraper
 }

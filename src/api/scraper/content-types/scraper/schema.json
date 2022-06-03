@@ -4,7 +4,8 @@
   "info": {
     "singularName": "scraper",
     "pluralName": "scrapers",
-    "displayName": "Scraper"
+    "displayName": "Scraper",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -41,6 +42,9 @@
       "relation": "oneToMany",
       "target": "api::zhs-sports-test.zhs-sports-test",
       "mappedBy": "scraper"
+    },
+    "currentlyRunning": {
+      "type": "boolean"
     }
   }
 }

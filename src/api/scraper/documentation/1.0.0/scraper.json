@@ -130,6 +130,9 @@
                                                             }
                                                           }
                                                         },
+                                                        "currentlyRunning": {
+                                                          "type": "boolean"
+                                                        },
                                                         "createdAt": {
                                                           "type": "string",
                                                           "format": "date-time"
@@ -485,6 +488,9 @@
                                     }
                                   }
                                 }
+                              },
+                              "currentlyRunning": {
+                                "type": "boolean"
                               },
                               "createdAt": {
                                 "type": "string",
@@ -925,6 +931,9 @@
                                                           }
                                                         }
                                                       },
+                                                      "currentlyRunning": {
+                                                        "type": "boolean"
+                                                      },
                                                       "createdAt": {
                                                         "type": "string",
                                                         "format": "date-time"
@@ -1280,6 +1289,9 @@
                                   }
                                 }
                               }
+                            },
+                            "currentlyRunning": {
+                              "type": "boolean"
                             },
                             "createdAt": {
                               "type": "string",
@@ -1533,6 +1545,9 @@
                           "example": "string or id"
                         }
                       },
+                      "currentlyRunning": {
+                        "type": "boolean"
+                      },
                       "createdAt": {
                         "type": "string",
                         "format": "date-time"
@@ -1703,6 +1718,9 @@
                                                             }
                                                           }
                                                         }
+                                                      },
+                                                      "currentlyRunning": {
+                                                        "type": "boolean"
                                                       },
                                                       "createdAt": {
                                                         "type": "string",
@@ -2059,6 +2077,9 @@
                                   }
                                 }
                               }
+                            },
+                            "currentlyRunning": {
+                              "type": "boolean"
                             },
                             "createdAt": {
                               "type": "string",
@@ -2408,6 +2429,9 @@
                                                           }
                                                         }
                                                       },
+                                                      "currentlyRunning": {
+                                                        "type": "boolean"
+                                                      },
                                                       "createdAt": {
                                                         "type": "string",
                                                         "format": "date-time"
@@ -2764,6 +2788,9 @@
                                 }
                               }
                             },
+                            "currentlyRunning": {
+                              "type": "boolean"
+                            },
                             "createdAt": {
                               "type": "string",
                               "format": "date-time"
@@ -3026,6 +3053,9 @@
                           ],
                           "example": "string or id"
                         }
+                      },
+                      "currentlyRunning": {
+                        "type": "boolean"
                       },
                       "createdAt": {
                         "type": "string",
