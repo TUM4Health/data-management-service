@@ -113,7 +113,7 @@ exports
 build
 .strapi-updater.json
 # Documentation
-src/extensions/documentation    
+src/extensions/documentation/**  
 
 ############################
 # Postgres
