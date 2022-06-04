@@ -42,10 +42,6 @@ const getDate = async () => {
     return date + ' ' + time;
 }
 
-const getReport = async (newSG) => {
-    return { newSG: newSG, date: await getDate() }
-}
-
 const mergeJSONs = (json1, json2) => {
     if (json1 == null) {
         return json2
@@ -301,7 +297,6 @@ const deleteEntriesMutex = async (relation, condition, scraper) => {
 }
 
 module.exports = {
-    getReport,
     getDate,
     scraperCanRun,
     mergeJSONs,

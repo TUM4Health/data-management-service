@@ -24,10 +24,11 @@ const {
     createZHSSportLocation,
     getZHSSportLocation,
     deleteOutdatedEntries,
-    updateScraper
+    updateScraper,
+    setScraperCurrentlyRunning
 } = require('./utils/query.js')
 
-// Stopped here -> continue here with the adaptions -> important to differentiate between old and new data
+// Main scrape function for ZHS website
 const scrape = async (scraper) => {
     // Base URL 
     const baseUrl = "https://www.buchung.zhs-muenchen.de/"
@@ -37,8 +38,6 @@ const scrape = async (scraper) => {
     let turndownService = new TurndownService()
     // Timestamp of beginning of scrape
     const beginScrapeTimestamp = new Date().toISOString();
-    // Indicates if any error happened during the scraping process
-    let success = true
 
     try {
         let res = await instance.get(baseSportsUrl);
@@ -333,23 +332,32 @@ const scrape = async (scraper) => {
             }));
         }));
     } catch (err) {
-        console.error(err);
-        success = false
+        console.error(err)
+        return (
+            {
+                message: "Error. No possibly outdated data was deleted as an error happend during fetching the data (most probably a repeated network error).",
+                timestamp: new Date().toISOString()
+            },
+            err
+        )
     }
 
     // Only cleanup if everything went well as there will be data deleted that wasn't updated
-    if (success) {
-        // Clean up of old entries
-        const deletedEntries = await deleteOutdatedEntries(beginScrapeTimestamp, scraper)
-        console.log(`Deleted ${deletedEntries} outdated data entries`)
-    } else {
-        console.log("No data was deleted as an error happend during fetching the data")
-    }
+    const deletedEntries = await deleteOutdatedEntries(beginScrapeTimestamp, scraper)
+
+    console.log(`Success. Deleted ${deletedEntries} outdated data entries.`)
+    return (
+        {
+            message: `Success. Deleted ${deletedEntries} outdated data entries.`,
+            timestamp: new Date().toISOString()
+        },
+        {}
+    )
 }
 
 // Main scrape function that is executed via cron job
 const mainScrape = async () => {
-    // Fetch the correct scraper thanks to the slug
+    // Fetch the correct scraper via slug
     const slug = "zhs"
     const scraper = await strapi.query('api::scraper.scraper').findOne({
         slug: slug
@@ -364,23 +372,15 @@ const mainScrape = async () => {
     const canRun = await scraperCanRun(scraper);
     if (canRun && scraper.enabled && !scraper.currentlyRunning) {
         // Set the scraper to currently running
-        await strapi.query('api::scraper.scraper').update({
-            where: { id: scraper.id },
-            data: {
-                currentlyRunning: true
-            }
-        });
+        setScraperCurrentlyRunning(scraper, true)
 
         // Execute scraper
-        await scrape(scraper)
+        const [message, err] = await scrape(scraper)
+        // Update scraper information
+        updateScraper(scraper, message, err)
 
         // Set the scraper to currently not running
-        await strapi.query('api::scraper.scraper').update({
-            where: { id: scraper.id },
-            data: {
-                currentlyRunning: false
-            }
-        });
+        setScraperCurrentlyRunning(scraper, false)
     }
 }
 

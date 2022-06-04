@@ -2,7 +2,7 @@ const axios = require('axios');
 const axiosRetry = require('axios-retry');
 const http = require('http');
 
-const MAX_REQUESTS_COUNT = 5
+const MAX_REQUESTS_COUNT = 3    // Max number of retries, set to 3 as ZHS website is not stable
 const INTERVAL_MS = 100
 let PENDING_REQUESTS = 0
 
@@ -39,12 +39,20 @@ instance.interceptors.response.use(function (response) {
     return Promise.reject(error)
 })
 
+/**
+ * Axios Retry Interceptor
+ */
 axiosRetry(instance, {
     retries: 10,
     retryDelay: (retryCount) => {
-        console.log(`Retry attempt: ${retryCount}`);
-        console.log(`Retry delay: ${retryCount * 2} sec`);
-        return retryCount * 2000; // time interval between retries
+        const retryDelay = (error.message === 'ETIMEDOUT') ? 15000 : (2000 * retryCount)
+        console.log(`Retry attempt: ${retryCount}`)
+        console.log(`Retry delay: ${retryDelay} ms`)
+        return retryDelay // time interval between retries
+    },
+    retryCondition: (error) => {
+        return axiosRetry.isNetworkOrIdempotentRequestError(error)
+            || error.code === 'ECONNABORTED';
     }
 });
 

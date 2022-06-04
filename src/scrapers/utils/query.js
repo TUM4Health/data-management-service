@@ -1,16 +1,44 @@
 'use strict'
 
 const chalk = require('chalk')
-const scraper = require('../../api/scraper/controllers/scraper.js')
 
 const {
     createOrUpdateEntriesLocalized,
     createOrUpdateEntries,
     getEntry,
     addRelationsToEntry,
-    mergeJSONs,
     deleteEntries
 } = require('./utils.js')
+
+// Update the scraper object
+const updateScraper = async (scraper, report, errors) => {
+    await strapi.query('scraper').update({
+        id: scraper.id
+    }, {
+        report: report,
+        error: errors,
+    });
+
+    console.log(`Job done for: ${chalk.green(scraper.name)}`);
+}
+
+// Set all scrapers to currently running
+const setAllScrapersCurrentlyRunning = async (currentlyRunning) => {
+    const scrapers = await strapi.query('api::scraper.scraper').findMany();
+    return Promise.all(scrapers.map(async (scraper) => {
+        await setScraperCurrentlyRunning(scraper, currentlyRunning);
+    }))
+}
+
+// Set a single scraper to currently running
+const setScraperCurrentlyRunning = async (scraper, currentlyRunning) => {
+    await strapi.query('api::scraper.scraper').update({
+        where: { id: scraper.id },
+        data: {
+            currentlyRunning: currentlyRunning
+        }
+    });
+}
 
 // Create the entire sports + links table + create relation to individual sport course
 const createZHSSport = async (dataGerman, dataEnglish, scraper) => {
@@ -71,6 +99,7 @@ const createZHSSportCourse = async (dataGerman, dataEnglish, relationData, scrap
     }
 }
 
+// Add relations to a ZHS Sport course
 const addRelationZHSSportCourse = async (sportCourseID, relationData) => {
     try {
         return await addRelationsToEntry(
@@ -98,6 +127,7 @@ const createZHSSportCourseOffering = async (data, scraper) => {
     }
 }
 
+// Adds relations to a ZHS Sport course offering
 const addRelationZHSSportCourseOffering = async (sportCourseOfferingID, relationData) => {
     try {
         return await addRelationsToEntry(
@@ -112,6 +142,7 @@ const addRelationZHSSportCourseOffering = async (sportCourseOfferingID, relation
     }
 }
 
+// Create a ZHS Sport Course Cost entry and link it to the individual sport course offering
 const createZHSSportCourseCost = async (data, relationData, scraper) => {
     try {
         const entryID = await createOrUpdateEntries(
@@ -134,7 +165,7 @@ const createZHSSportCourseCost = async (data, relationData, scraper) => {
     }
 }
 
-// Maybe create the event schedule in a different function as it creates another table entry (must be run after creation of course)
+// Create ZHS Sport Course Event and link it to the individual sport course offering
 const createZHSSportsCourseEvent = async (data, relationData, scraper) => {
     try {
         const entryID = await createOrUpdateEntries(
@@ -167,6 +198,7 @@ const createZHSSportsCourseEvent = async (data, relationData, scraper) => {
     }
 }
 
+// Gets a specific ZHS Sport Location
 const getZHSSportLocation = async (data, scraper) => {
     try {
         return await getEntry(
@@ -181,8 +213,7 @@ const getZHSSportLocation = async (data, scraper) => {
     }
 }
 
-// Create all locations of sports (probably extra scraping call BEFORE the sports course creation?)
-// Checks count of locations from scraping to the count of locations in DB, checks all names and coordinates, updates them accordingly
+// Creates a specific ZHS Sport Location entrys
 const createZHSSportLocation = async (data, scraper) => {
     try {
         return await createOrUpdateEntries(
@@ -204,17 +235,7 @@ const createZHSSportLocation = async (data, scraper) => {
     }
 }
 
-const updateScraper = async (scraper, report, errors) => {
-    await strapi.query('scraper').update({
-        id: scraper.id
-    }, {
-        report: report,
-        error: errors,
-    });
-
-    console.log(`Job done for: ${chalk.green(scraper.name)}`);
-}
-
+// Delete all outdated entires that were last modifier before the last update
 const deleteOutdatedEntries = async (beginScrapeTimestamp, scraper) => {
     try {
         const relations = [
@@ -256,5 +277,7 @@ module.exports = {
     createZHSSportLocation,
     getZHSSportLocation,
     deleteOutdatedEntries,
-    updateScraper
+    updateScraper,
+    setScraperCurrentlyRunning,
+    setAllScrapersCurrentlyRunning
 }

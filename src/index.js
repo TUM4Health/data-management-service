@@ -1,9 +1,8 @@
 'use strict';
 
 const {
-  mainScrape,
-  mainScrapeCleanup
-} = require('./scrapers/zhsofferings.js')
+  setAllScrapersCurrentlyRunning
+} = require('./scrapers/utils/query')
 
 module.exports = {
   /**
@@ -22,6 +21,7 @@ module.exports = {
    * run jobs, or perform some special logic.
    */
   bootstrap({ strapi }) {
-    mainScrape() // TODO: Delete this once a proper cronjob is setted
+    // Set the scraper to currently not running
+    setAllScrapersCurrentlyRunning(false)
   },
 };
