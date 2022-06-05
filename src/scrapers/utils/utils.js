@@ -35,6 +35,36 @@ const scraperCanRun = async (scraper) => {
     return false
 }
 
+// Update the scraper object
+const updateScraper = async (scraper, report, errors) => {
+    await strapi.query('scraper').update({
+        id: scraper.id
+    }, {
+        report: report,
+        error: errors,
+    });
+
+    console.log(`Job done for: ${chalk.green(scraper.name)}`);
+}
+
+// Set all scrapers to currently running
+const setAllScrapersCurrentlyRunning = async (currentlyRunning) => {
+    const scrapers = await strapi.query('api::scraper.scraper').findMany();
+    return Promise.all(scrapers.map(async (scraper) => {
+        await setScraperCurrentlyRunning(scraper, currentlyRunning);
+    }))
+}
+
+// Set a single scraper to currently running
+const setScraperCurrentlyRunning = async (scraper, currentlyRunning) => {
+    await strapi.query('api::scraper.scraper').update({
+        where: { id: scraper.id },
+        data: {
+            currentlyRunning: currentlyRunning
+        }
+    });
+}
+
 const getDate = async () => {
     const today = new Date();
     const date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -230,8 +260,6 @@ const addRelationsToEntryMutex = async (relation, filterCriteria, newDataRelatio
 
         // If entry exists -> Update entry
         if (existingEntry != null && existingEntry.id != null) {
-            console.log("Found relation entry");
-
             const updatedEntry = await strapi.db.query(relation).update({
                 where: { id: existingEntry.id },
                 data: mergeRelationalData(
@@ -241,12 +269,8 @@ const addRelationsToEntryMutex = async (relation, filterCriteria, newDataRelatio
             });
 
             return updatedEntry.id
-        } else { // If it doesn't exists -> Create new entry
+        } else { // If it doesn't exists -> Error
             console.log("Error while adding relations");
-            console.log(existingEntry)
-            console.log(relation)
-            console.log(newDataRelations)
-            console.log(filterCriteria)
         }
     } catch (e) {
         console.log(e);
@@ -304,5 +328,8 @@ module.exports = {
     createOrUpdateEntries,
     getEntry,
     addRelationsToEntry,
-    deleteEntries
+    deleteEntries,
+    updateScraper,
+    setScraperCurrentlyRunning,
+    setAllScrapersCurrentlyRunning
 }

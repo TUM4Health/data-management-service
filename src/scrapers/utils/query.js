@@ -10,36 +10,6 @@ const {
     deleteEntries
 } = require('./utils.js')
 
-// Update the scraper object
-const updateScraper = async (scraper, report, errors) => {
-    await strapi.query('scraper').update({
-        id: scraper.id
-    }, {
-        report: report,
-        error: errors,
-    });
-
-    console.log(`Job done for: ${chalk.green(scraper.name)}`);
-}
-
-// Set all scrapers to currently running
-const setAllScrapersCurrentlyRunning = async (currentlyRunning) => {
-    const scrapers = await strapi.query('api::scraper.scraper').findMany();
-    return Promise.all(scrapers.map(async (scraper) => {
-        await setScraperCurrentlyRunning(scraper, currentlyRunning);
-    }))
-}
-
-// Set a single scraper to currently running
-const setScraperCurrentlyRunning = async (scraper, currentlyRunning) => {
-    await strapi.query('api::scraper.scraper').update({
-        where: { id: scraper.id },
-        data: {
-            currentlyRunning: currentlyRunning
-        }
-    });
-}
-
 // Create the entire sports + links table + create relation to individual sport course
 const createZHSSport = async (dataGerman, dataEnglish, scraper) => {
     try {
@@ -276,8 +246,5 @@ module.exports = {
     createZHSSportsCourseEvent,
     createZHSSportLocation,
     getZHSSportLocation,
-    deleteOutdatedEntries,
-    updateScraper,
-    setScraperCurrentlyRunning,
-    setAllScrapersCurrentlyRunning
+    deleteOutdatedEntries
 }

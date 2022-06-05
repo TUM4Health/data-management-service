@@ -7,12 +7,14 @@ const htmlentities = require('html-entities');
 const TurndownService = require('turndown');
 
 // Properly configured Axios instance (eg. limited parallel connections, keep alive agent, etc.)
-const instance = require('./axios.js');
+const instance = require('./utils/axios.js');
+// Scraper utils
 const {
-    getReport,
-    getDate,
-    scraperCanRun
+    scraperCanRun,
+    updateScraper,
+    setScraperCurrentlyRunning
 } = require('./utils/utils.js')
+// Querying utils
 const {
     createZHSSport,
     createZHSSportCourse,
@@ -23,9 +25,7 @@ const {
     createZHSSportsCourseEvent,
     createZHSSportLocation,
     getZHSSportLocation,
-    deleteOutdatedEntries,
-    updateScraper,
-    setScraperCurrentlyRunning
+    deleteOutdatedEntries
 } = require('./utils/query.js')
 
 // Main scrape function for ZHS website

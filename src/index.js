@@ -2,7 +2,7 @@
 
 const {
   setAllScrapersCurrentlyRunning
-} = require('./scrapers/utils/query')
+} = require('./scrapers/utils/utils.js')
 
 module.exports = {
   /**
