@@ -105,7 +105,7 @@ const createOrUpdateEntriesLocalizedMutex = async (relation, filterCriteria, pop
             existingEntry.localizations.length > 0 &&
             existingEntry.localizations[0].id != null) {
 
-            console.log("Entry already exists");
+            console.log(`Entry already exists in ${relation} with ID ${existingEntry.id}`);
 
             const updatedLocalizationEntry = await strapi.db.query(relation).update({
                 where: { id: existingEntry.localizations[0].id },
@@ -132,9 +132,6 @@ const createOrUpdateEntriesLocalizedMutex = async (relation, filterCriteria, pop
 
             return updatedFullEntry.id
         } else { // If it doesn't exists -> Create new entry
-
-            console.log("Create new entry");
-
             const newLocalizationEntry = await strapi.query(relation).create({
                 data: mergeJSONs(
                     {
@@ -143,6 +140,8 @@ const createOrUpdateEntriesLocalizedMutex = async (relation, filterCriteria, pop
                     englishData
                 )
             })
+
+            console.log(`Create new entry in ${relation} with ID ${newLocalizationEntry.id}`);
 
             const newFullEntry = await strapi.query(relation).create({
                 data: mergeJSONs(
@@ -178,7 +177,7 @@ const createOrUpdateEntriesMutex = async (relation, filterCriteria, data) => {
 
         // If entry exists -> Update entry
         if (existingEntry != null && existingEntry.id != null) {
-            console.log("Entry already exists");
+            console.log(`Entry already exists in ${relation} with ID ${existingEntry.id}`);
 
             const updatedEntry = await strapi.db.query(relation).update({
                 where: { id: existingEntry.id },
@@ -192,8 +191,6 @@ const createOrUpdateEntriesMutex = async (relation, filterCriteria, data) => {
 
             return updatedEntry.id
         } else { // If it doesn't exists -> Create new entry
-            console.log("Create new entry");
-
             const newFullEntry = await strapi.query(relation).create({
                 data: mergeJSONs(
                     {
@@ -202,6 +199,8 @@ const createOrUpdateEntriesMutex = async (relation, filterCriteria, data) => {
                     data
                 )
             })
+
+            console.log(`Create new entry in ${relation} with ID ${newFullEntry.id}`);
 
             return newFullEntry.id
         }
@@ -258,7 +257,7 @@ const addRelationsToEntryMutex = async (relation, filterCriteria, newDataRelatio
             populate: fieldsToPopulate
         })
 
-        // If entry exists -> Update entry
+        // If entry exists -> Update entry with relation
         if (existingEntry != null && existingEntry.id != null) {
             const updatedEntry = await strapi.db.query(relation).update({
                 where: { id: existingEntry.id },
@@ -268,9 +267,11 @@ const addRelationsToEntryMutex = async (relation, filterCriteria, newDataRelatio
                 )
             });
 
+            console.log(`Added ${newDataRelations} to ${relation} entry with ID ${existingEntry.id}`);
+
             return updatedEntry.id
         } else { // If it doesn't exists -> Error
-            console.log("Error while adding relations");
+            console.log(`Error while adding relations in ${relation} with filter criteria ${filterCriteria} and data ${newDataRelations}`);
         }
     } catch (e) {
         console.log(e);
