@@ -37,12 +37,6 @@
     "next_execution_at": {
       "type": "string"
     },
-    "zhs_sports_tests": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::zhs-sports-test.zhs-sports-test",
-      "mappedBy": "scraper"
-    },
     "currentlyRunning": {
       "type": "boolean"
     }

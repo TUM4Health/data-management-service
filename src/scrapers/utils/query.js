@@ -150,6 +150,9 @@ const createZHSSportsCourseEvent = async (data, relationData, scraper) => {
                     },
                     {
                         time: data["time"],
+                    },
+                    {
+                        zhs_sport_location: relationData["zhs_sport_location"][0]
                     }
                 ],
             },

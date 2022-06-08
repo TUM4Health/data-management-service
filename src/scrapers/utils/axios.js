@@ -44,7 +44,7 @@ instance.interceptors.response.use(function (response) {
  */
 axiosRetry(instance, {
     retries: 10,
-    retryDelay: (retryCount) => {
+    retryDelay: (retryCount, error) => {
         const retryDelay = (error.message === 'ETIMEDOUT') ? 15000 : (2000 * retryCount)
         console.log(`Retry attempt: ${retryCount}`)
         console.log(`Retry delay: ${retryDelay} ms`)

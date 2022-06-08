@@ -46,15 +46,17 @@ const scrape = async (scraper) => {
         let sportLinks = $('#bs_content > dl > dd').toArray().map(element => baseSportsUrl + $(element).children().attr("href"))
 
         // TODO: Only for dev purposes -> change above variable to const then
-        sportLinks = sportLinks.splice(0, 10)
+        sportLinks = sportLinks.splice(43, 43)
 
         // Iterate over every sport type
+        // TODO: Skip the "Restplätze" sport type
         await Promise.all(sportLinks.map(async (sportLink, i) => {
             let res = await instance.get(sportLink);
 
             let $ = cheerio.load(res.data);
 
             let sportHeadingGerman = $('.bs_head').text()
+            console.log(sportHeadingGerman)
             let sportHeadingEnglish = $('.bs_kursbeschreibung .bslang_en span strong').map((i, element) => {
                 if ($(element).parent().css('font-size') == '14px') {
                     return $(element).text()
@@ -121,7 +123,7 @@ const scrape = async (scraper) => {
                     const locationLinkRoute = ($(element).find('td.bs_sort > a').attr('target') == '_blank') ? undefined : $(element).find('td.bs_sort > a').attr('href')?.replace('&campus=0', '');
                     const locationLink = baseUrl.slice(0, -1) + locationLinkRoute;
                     const duration = $(element).find('td.bs_szr').text();
-                    const detailsViewLinkRoute = $(element).find('td.bs_szr a').attr('href').replace('&campus=0', '')
+                    const detailsViewLinkRoute = $(element).find('td.bs_szr a').attr('href')?.replace('&campus=0', '')
                     const detailsViewLink = baseUrl.slice(0, -1) + detailsViewLinkRoute
                     const guidance = $(element).find('td.bs_skl').text();
                     const bookingRawValue = $(element).find('td.bs_sbuch > input').val();
@@ -177,7 +179,7 @@ const scrape = async (scraper) => {
                         costStudents = $(costDetailedRaw).find('div:nth-child(1)').text()
                         costEmployee = $(costDetailedRaw).find('div:nth-child(4)').text()
                         costAssociationMember = $(costDetailedRaw).find('div:nth-child(7)').text()
-                        costShort = $(element).find('td.bs_spreis > div').children().remove().end().text().replace(/\s/g, '');
+                        costShort = $(element).find('td.bs_spreis > div').children().remove().end().text()?.replace(/\s/g, '');
                     } else {
                         const costOnlyCardRaw = $(element).find('td.bs_spreis > span')
                         costDetailed = costOnlyCardRaw.contents().first().text() + " " + costOnlyCardRaw.contents().last().text()
@@ -257,16 +259,17 @@ const scrape = async (scraper) => {
                             const day = $(element).find('td:nth-child(1)').text();
                             const date = $(element).find('td:nth-child(2)').text();
                             const time = $(element).find('td:nth-child(3)').text();
-                            const locationVisibleText = $(element).find('td:nth-child(4)').text().replace('&campus=0&z=46&f=0', '');    // Remove campus and zoom level parameters
-                            const locationLink = $(element).find('td:nth-child(4) > a').attr('href');
+                            const locationVisibleText = $(element).find('td:nth-child(4)').text();
+                            const locationLink = $(element).find('td:nth-child(4) > a').attr('href')?.replace('&campus=0&z=46&f=0', '');    // Remove campus and zoom level parameters
 
+                            let locationID = null
                             // If location link is available, fetch details of location
-                            if (locationLink != null && locationVisibleText != '') {
+                            if (locationLink != null && locationLink != undefined && locationVisibleText != '') {
                                 // Check if the location already exists
                                 let location = await getZHSSportLocation({
                                     locationLink: locationLink
                                 })
-                                let locationID = location?.id
+                                locationID = location?.id
 
                                 // If location doesn't exist yet, create it
                                 if (location == null || locationID == null || locationID == undefined) {
@@ -305,19 +308,19 @@ const scrape = async (scraper) => {
                                         }
                                     )
                                 }
-
-                                // Create sport course event and link location to it
-                                return await createZHSSportsCourseEvent(
-                                    {
-                                        day: day,
-                                        date: date,
-                                        time: time,
-                                    },
-                                    {
-                                        zhs_sport_location: [locationID]
-                                    }
-                                )
                             }
+
+                            // Create sport course event and link location to it
+                            return await createZHSSportsCourseEvent(
+                                {
+                                    day: day,
+                                    date: date,
+                                    time: time,
+                                },
+                                {
+                                    zhs_sport_location: [locationID]    // It may be that the locationID is null as no location exists
+                                }
+                            )
                         }))
 
                         // Link all sport course events to the respective sport course offering
@@ -333,26 +336,26 @@ const scrape = async (scraper) => {
         }));
     } catch (err) {
         console.error(err)
-        return (
+        return [
             {
                 message: "Error. No possibly outdated data was deleted as an error happend during fetching the data (most probably a repeated network error).",
                 timestamp: new Date().toISOString()
             },
             err
-        )
+        ]
     }
 
     // Only cleanup if everything went well as there will be data deleted that wasn't updated
     const deletedEntries = await deleteOutdatedEntries(beginScrapeTimestamp, scraper)
 
     console.log(`Success. Deleted ${deletedEntries} outdated data entries.`)
-    return (
+    return [
         {
             message: `Success. Deleted ${deletedEntries} outdated data entries.`,
             timestamp: new Date().toISOString()
         },
         {}
-    )
+    ]
 }
 
 // Main scrape function that is executed via cron job

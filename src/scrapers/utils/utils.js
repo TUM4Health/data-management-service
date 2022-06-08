@@ -37,11 +37,12 @@ const scraperCanRun = async (scraper) => {
 
 // Update the scraper object
 const updateScraper = async (scraper, report, errors) => {
-    await strapi.query('scraper').update({
-        id: scraper.id
-    }, {
-        report: report,
-        error: errors,
+    await strapi.query('api::scraper.scraper').update({
+        where: { id: scraper.id },
+        data: {
+            report: report,
+            error: errors
+        }
     });
 
     console.log(`Job done for: ${chalk.green(scraper.name)}`);
@@ -105,7 +106,7 @@ const createOrUpdateEntriesLocalizedMutex = async (relation, filterCriteria, pop
             existingEntry.localizations.length > 0 &&
             existingEntry.localizations[0].id != null) {
 
-            console.log(`Entry already exists in ${relation} with ID ${existingEntry.id}`);
+            console.log(`Update entry in ${relation?.split('.')[1]} with ID ${existingEntry.id}`);
 
             const updatedLocalizationEntry = await strapi.db.query(relation).update({
                 where: { id: existingEntry.localizations[0].id },
@@ -141,7 +142,7 @@ const createOrUpdateEntriesLocalizedMutex = async (relation, filterCriteria, pop
                 )
             })
 
-            console.log(`Create new entry in ${relation} with ID ${newLocalizationEntry.id}`);
+            console.log(`Create new entry in ${relation?.split('.')[1]} with ID ${newLocalizationEntry.id}`);
 
             const newFullEntry = await strapi.query(relation).create({
                 data: mergeJSONs(
@@ -177,7 +178,7 @@ const createOrUpdateEntriesMutex = async (relation, filterCriteria, data) => {
 
         // If entry exists -> Update entry
         if (existingEntry != null && existingEntry.id != null) {
-            console.log(`Entry already exists in ${relation} with ID ${existingEntry.id}`);
+            console.log(`Update entry in ${relation?.split('.')[1]} with ID ${existingEntry.id}`);
 
             const updatedEntry = await strapi.db.query(relation).update({
                 where: { id: existingEntry.id },
@@ -200,7 +201,7 @@ const createOrUpdateEntriesMutex = async (relation, filterCriteria, data) => {
                 )
             })
 
-            console.log(`Create new entry in ${relation} with ID ${newFullEntry.id}`);
+            console.log(`Create new entry in ${relation?.split('.')[1]} with ID ${newFullEntry.id}`);
 
             return newFullEntry.id
         }
@@ -267,11 +268,11 @@ const addRelationsToEntryMutex = async (relation, filterCriteria, newDataRelatio
                 )
             });
 
-            console.log(`Added ${newDataRelations} to ${relation} entry with ID ${existingEntry.id}`);
+            console.log(`Add relation ${JSON.stringify(newDataRelations)} to ${relation?.split('.')[1]} entry with ID ${existingEntry.id}`);
 
             return updatedEntry.id
         } else { // If it doesn't exists -> Error
-            console.log(`Error while adding relations in ${relation} with filter criteria ${filterCriteria} and data ${newDataRelations}`);
+            console.log(`Error while adding relations in ${relation?.split('.')[1]} with filter criteria ${JSON.stringify(filterCriteria)} and data ${JSON.stringify(newDataRelations)}`);
         }
     } catch (e) {
         console.log(e);
