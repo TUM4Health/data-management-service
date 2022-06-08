@@ -46,7 +46,7 @@ const scrape = async (scraper) => {
         let sportLinks = $('#bs_content > dl > dd').toArray().map(element => baseSportsUrl + $(element).children().attr("href"))
 
         // TODO: Only for dev purposes -> change above variable to const then
-        sportLinks = sportLinks.splice(43, 43)
+        //sportLinks = sportLinks.splice(43, 43)
 
         // Iterate over every sport type
         // TODO: Skip the "Restplätze" sport type
