@@ -11,11 +11,12 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@strapi/plugin-documentation": "^4.1.9",
-    "@strapi/plugin-graphql": "^4.1.9",
+    "@strapi/plugin-documentation": "4.1.9",
     "@strapi/plugin-i18n": "4.1.9",
     "@strapi/plugin-users-permissions": "4.1.9",
     "@strapi/strapi": "4.1.9",
+    "@strapi/utils": "4.1.9",
+    "strapi-utils": "3.6.10",
     "async-mutex": "^0.3.2",
     "axios-retry": "^3.2.5",
     "better-sqlite3": "7.4.6",
@@ -26,7 +27,6 @@
     "knex": "^2.0.0",
     "pg": "^8.7.3",
     "sharp": "^0.30.4",
-    "strapi-connector-bookshelf": "^3.6.9",
     "turndown": "^7.1.1",
     "underscore": "^1.13.3"
   },
