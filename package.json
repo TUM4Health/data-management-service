@@ -27,7 +27,7 @@
     "html-entities": "^2.3.3",
     "knex": "^2.0.0",
     "pg": "^8.7.3",
-    "sharp": "^0.30.4",
+    "sharp": "^0.30.5",
     "strapi-utils": "3.6.10",
     "turndown": "^7.1.1",
     "underscore": "^1.13.3"
