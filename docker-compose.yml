@@ -23,6 +23,8 @@ services:
       - ./package.json:/app/package.json
       - ./package-lock.json:/app/package-lock.json
       - ./.env:/app/.env
+      - ./.eslintignore:/app/.eslintignore
+      - ./.eslintrc.json:/app/.eslintrc.json
     ports:
       - "1337:1337"
     networks:

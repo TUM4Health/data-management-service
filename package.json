@@ -8,7 +8,9 @@
     "start": "strapi start",
     "build": "strapi build",
     "install-documentation": "strapi install documentation",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "lint": "npx eslint .",
+    "lint-fix": "npx eslint . --fix"
   },
   "dependencies": {
     "@strapi/plugin-documentation": "4.1.9",
@@ -16,7 +18,6 @@
     "@strapi/plugin-users-permissions": "4.1.9",
     "@strapi/strapi": "4.1.9",
     "@strapi/utils": "4.1.9",
-    "strapi-utils": "3.6.10",
     "async-mutex": "^0.3.2",
     "axios-retry": "^3.2.5",
     "better-sqlite3": "7.4.6",
@@ -27,6 +28,7 @@
     "knex": "^2.0.0",
     "pg": "^8.7.3",
     "sharp": "^0.30.4",
+    "strapi-utils": "3.6.10",
     "turndown": "^7.1.1",
     "underscore": "^1.13.3"
   },
@@ -40,5 +42,10 @@
     "node": ">=12.x.x <=16.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  }
 }
