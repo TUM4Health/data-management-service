@@ -28,6 +28,8 @@ const {
     deleteOutdatedEntries,
 } = require('./utils/query.js');
 
+const SKIP_SPORT_TYPES = ["RESTPLÄTZE - alle freien Kursplätze dieses Zeitraums"];
+
 // Main scrape function for ZHS website
 const scrape = async (scraper) => {
     // Base URL
@@ -43,14 +45,17 @@ const scrape = async (scraper) => {
         const res = await axiosInstance.get(baseSportsUrl);
 
         const $ = cheerio.load(res.data);
-        const sportLinks = $('#bs_content > dl > dd').toArray().map((element) => baseSportsUrl + $(element).children().attr('href'));
+        // All sport types name
+        const sportTypeNames = $('#bs_content > dl > dd').toArray().map(element => $(element).text());
+        const sportTypeLinks = $('#bs_content > dl > dd').toArray().map(element => baseSportsUrl + $(element).children().attr('href'));
 
-        // TODO: Only for dev purposes -> change above variable to const then
-        // sportLinks = sportLinks.splice(43, 43)
+        // Iterate over every sport type and fetch details
+        await Promise.all(sportTypeLinks.map(async (sportLink, i) => {
+            // Skip the "Restplätze" (so remaining tickets) sport type (as it isn't really a sport type)
+            if (SKIP_SPORT_TYPES.includes(sportTypeNames[i])) {
+                return;
+            }
 
-        // Iterate over every sport type
-        // TODO: Skip the "Restplätze" sport type
-        await Promise.all(sportLinks.map(async (sportLink, i) => {
             let res = await axiosInstance.get(sportLink);
 
             const $ = cheerio.load(res.data);

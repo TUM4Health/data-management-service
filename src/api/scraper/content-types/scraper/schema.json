@@ -13,17 +13,21 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "description": {
       "type": "string"
     },
     "slug": {
       "type": "uid",
-      "targetField": "name"
+      "targetField": "name",
+      "required": true
     },
     "enabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": true,
+      "required": true
     },
     "error": {
       "type": "json"
@@ -32,13 +36,17 @@
       "type": "json"
     },
     "frequency": {
-      "type": "string"
+      "type": "string",
+      "default": "0 * * * *",
+      "required": true
     },
     "next_execution_at": {
       "type": "string"
     },
     "currentlyRunning": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false,
+      "required": true
     }
   }
 }
