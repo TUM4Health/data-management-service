@@ -1,7 +1,6 @@
 'use strict';
 
 const { EOL } = require('os');
-const chalk = require('chalk');
 const cheerio = require('cheerio');
 const htmlentities = require('html-entities');
 const TurndownService = require('turndown');
@@ -53,7 +52,7 @@ const scrape = async (scraper) => {
         await Promise.all(sportTypeLinks.map(async (sportLink, i) => {
             // Skip the "Restplätze" (so remaining tickets) sport type (as it isn't really a sport type)
             if (SKIP_SPORT_TYPES.includes(sportTypeNames[i])) {
-                return;
+                return false;
             }
 
             let res = await axiosInstance.get(sportLink);
@@ -373,8 +372,13 @@ const mainScrape = async () => {
     });
 
     // If the scraper doesn't exists, is disabled or doesn't have a frequency then we do nothing
-    if (scraper == null || !scraper.enabled || !scraper.frequency) {
-        console.log(`${chalk.red('Exit')}: (Your scraper ${slug} may does not exist, is not activated, does not have a frequency field filled in or is currently running)`);
+    if (scraper == null) {
+        console.log(`Scraper '${slug}' does not exist`);
+        return;
+    }
+
+    if (!scraper.enabled || !scraper.frequency) {
+        console.log(`Your scraper ${slug} may not be activated or does not have a frequency field filled in`);
         return;
     }
 
@@ -397,8 +401,6 @@ const mainScrape = async () => {
     } else {
         if (scraper.currentlyRunning) {
             console.log("Scraping process currently running")
-        } else if (!scraper.enabled) {
-            console.log("Scraper is disabled")
         }
     }
 };
