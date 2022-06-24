@@ -380,6 +380,8 @@ const mainScrape = async () => {
 
     const canRun = await scraperCanRun(scraper);
     if (canRun && scraper.enabled && !scraper.currentlyRunning) {
+        console.log("Starting the scraping process")
+
         // Set the scraper to currently running
         setScraperCurrentlyRunning(scraper, true);
 
@@ -390,6 +392,14 @@ const mainScrape = async () => {
 
         // Set the scraper to currently not running
         setScraperCurrentlyRunning(scraper, false);
+
+        console.log("Finished the scraping process")
+    } else {
+        if (scraper.currentlyRunning) {
+            console.log("Scraping process currently running")
+        } else if (!scraper.enabled) {
+            console.log("Scraper is disabled")
+        }
     }
 };
 
