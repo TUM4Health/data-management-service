@@ -55,8 +55,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd tum4health-cms
-            docker-compose -f docker-compose.deploy.yml down
+            docker compose -f docker-compose.deploy.yml down
             docker system prune --force
-            docker-compose -f docker-compose.deploy.yml pull
-            docker-compose -f docker-compose.deploy.yml up -d
+            docker compose -f docker-compose.deploy.yml pull
+            docker compose -f docker-compose.deploy.yml up -d
     needs: build-push

@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "zhs_sport_course_events",
+  "info": {
+    "singularName": "zhs-sport-course-event",
+    "pluralName": "zhs-sport-course-events",
+    "displayName": "ZHSSportCourseEvent",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "day": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "date": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "time": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "zhs_sport_location": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::zhs-sport-location.zhs-sport-location"
+    }
+  }
+}
