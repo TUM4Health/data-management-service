@@ -24,15 +24,15 @@
       },
       "type": "string"
     },
-    "locations": {
+    "zhs_sport_locations": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::location.location"
+      "target": "api::zhs-sport-location.zhs-sport-location"
     },
-    "zhs_offerings": {
+    "zhs_sport_courses": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::zhs-offering.zhs-offering"
+      "target": "api::zhs-sport-course.zhs-sport-course"
     }
   }
 }
