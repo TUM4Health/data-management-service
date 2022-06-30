@@ -29,10 +29,10 @@
       "relation": "oneToMany",
       "target": "api::zhs-sport-location.zhs-sport-location"
     },
-    "zhs_sport_courses": {
+    "zhs_sports": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::zhs-sport-course.zhs-sport-course"
+      "target": "api::zhs-sport.zhs-sport"
     }
   }
 }
