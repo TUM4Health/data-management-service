@@ -1,0 +1,62 @@
+{
+  "kind": "collectionType",
+  "collectionName": "survey_questions",
+  "info": {
+    "singularName": "survey-question",
+    "pluralName": "survey-questions",
+    "displayName": "SurveyQuestion"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "question": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "text"
+    },
+    "published": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "datetime"
+    },
+    "survey_question_freetext": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::survey-question-freetext.survey-question-freetext",
+      "mappedBy": "survey_question"
+    },
+    "survey_question_range": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::survey-question-range.survey-question-range",
+      "mappedBy": "survey_question"
+    },
+    "survey_question_select": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::survey-question-select.survey-question-select",
+      "mappedBy": "survey_question"
+    }
+  }
+}

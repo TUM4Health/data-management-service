@@ -16,36 +16,16 @@
     }
   },
   "attributes": {
-    "question": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "string",
-      "required": true
-    },
-    "description": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "text"
-    },
     "survey_response_freetexts": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::survey-response-freetext.survey-response-freetext"
     },
-    "published": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "datetime",
-      "required": false
+    "survey_question": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::survey-question.survey-question",
+      "inversedBy": "survey_question_freetext"
     }
   }
 }

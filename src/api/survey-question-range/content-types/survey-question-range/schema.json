@@ -16,31 +16,6 @@
     }
   },
   "attributes": {
-    "question": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "string",
-      "required": true
-    },
-    "description": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "text"
-    },
-    "published": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "datetime"
-    },
     "survey_response_ranges": {
       "type": "relation",
       "relation": "oneToMany",
@@ -69,6 +44,12 @@
         }
       },
       "type": "integer"
+    },
+    "survey_question": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::survey-question.survey-question",
+      "inversedBy": "survey_question_range"
     }
   }
 }
