@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "survey_question_select_choices",
+  "info": {
+    "singularName": "survey-question-select-choice",
+    "pluralName": "survey-question-select-choices",
+    "displayName": "SurveyQuestionSelectChoice"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "choiceText": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string",
+      "required": true
+    },
+    "choiceDescription": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "text"
+    }
+  }
+}
