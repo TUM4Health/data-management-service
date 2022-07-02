@@ -2,8 +2,8 @@ const axios = require('axios');
 const axiosRetry = require('axios-retry');
 const http = require('http');
 
-const MAX_REQUESTS_COUNT = 3; // Max number of retries, set to 3 as ZHS website is not stable
-const INTERVAL_MS = 100;	// Cooldown interval until a new request is fired
+const MAX_REQUESTS_COUNT = 1; // Max number of retries, set to 3 as ZHS website is not stable
+const INTERVAL_MS = 300;	// Cooldown interval until a new request is fired
 const TIMOUT_MS = 8000;		// Maximum timeinterval until a timeout error is thrown
 const RETRY_DELAY_TIMEOUT = 15000;		// Time period waited until a timeout occures
 const RETRY_DELAY_STANDARD = 2000;		// Time period in case of a normal error (so no timeout)
