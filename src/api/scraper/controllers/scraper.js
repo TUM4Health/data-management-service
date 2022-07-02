@@ -1,6 +1,6 @@
 'use strict';
 
-const { sanitizeEntity } = require('strapi-utils');
+const { sanitizeEntity } = require('@strapi/utils');
 
 /**
  *  scraper controller
@@ -10,10 +10,10 @@ const { createCoreController } = require('@strapi/strapi').factories;
 
 module.exports = createCoreController('api::scraper.scraper', ({ strapi }) => ({
 	/**
-     * Retrieve a record.
-     *
-     * @return {Object}
-     */
+	 * Retrieve a record.
+	 *
+	 * @return {Object}
+	 */
 
 	async findOne(ctx) {
 		const { slug } = ctx.params;
