@@ -7,7 +7,7 @@ const INTERVAL_MS = 300;	// Cooldown interval until a new request is fired
 const TIMOUT_MS = 8000;		// Maximum timeinterval until a timeout error is thrown
 const RETRY_DELAY_TIMEOUT = 15000;		// Time period waited until a timeout occures
 const RETRY_DELAY_STANDARD = 2000;		// Time period in case of a normal error (so no timeout)
-const MAXIMUM_RETRIES = 10;		// Maximum amout of retries in case of error
+const MAXIMUM_RETRIES = 100;		// Maximum amout of retries in case of error
 let PENDING_REQUESTS = 0;
 
 // create new axios instance
