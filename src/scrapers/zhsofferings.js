@@ -27,6 +27,7 @@ const {
     deleteOutdatedEntries,
 } = require('./utils/query.js');
 
+// Sport types that should be skipped
 const SKIP_SPORT_TYPES = ["RESTPLÄTZE - alle freien Kursplätze dieses Zeitraums"];
 
 // Main scrape function for ZHS website
