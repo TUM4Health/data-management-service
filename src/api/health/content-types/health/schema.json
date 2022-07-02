@@ -4,7 +4,8 @@
   "info": {
     "singularName": "health",
     "pluralName": "healths",
-    "displayName": "Health"
+    "displayName": "Health",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -20,11 +21,20 @@
       "relation": "oneToMany",
       "target": "api::offering.offering"
     },
-    "surveys": {
+    "survey_question_freetexts": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::survey.survey",
-      "mappedBy": "health"
+      "target": "api::survey-question-freetext.survey-question-freetext"
+    },
+    "survey_question_ranges": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::survey-question-range.survey-question-range"
+    },
+    "survey_question_selects": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::survey-question-select.survey-question-select"
     }
   }
 }

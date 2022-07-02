@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "survey_question_ranges",
+  "info": {
+    "singularName": "survey-question-range",
+    "pluralName": "survey-question-ranges",
+    "displayName": "SurveyQuestionRange",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "survey_response_ranges": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::survey-response-range.survey-response-range"
+    },
+    "minRange": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "integer"
+    },
+    "maxRange": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "integer"
+    },
+    "stepsRange": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "integer"
+    },
+    "survey_question": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::survey-question.survey-question",
+      "inversedBy": "survey_question_range"
+    }
+  }
+}

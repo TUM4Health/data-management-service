@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "survey_question_selects",
+  "info": {
+    "singularName": "survey-question-select",
+    "pluralName": "survey-question-selects",
+    "displayName": "SurveyQuestionSelect",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "survey_question_select_choices": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::survey-question-select-choice.survey-question-select-choice"
+    },
+    "survey_question": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::survey-question.survey-question",
+      "inversedBy": "survey_question_select"
+    },
+    "survey_response_selects": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::survey-response-select.survey-response-select"
+    }
+  }
+}

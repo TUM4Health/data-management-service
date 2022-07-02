@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "survey_response_selects",
+  "info": {
+    "singularName": "survey-response-select",
+    "pluralName": "survey-response-selects",
+    "displayName": "SurveyResponseSelect"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "survey_question_select_choices": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::survey-question-select-choice.survey-question-select-choice"
+    }
+  }
+}
