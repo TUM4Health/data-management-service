@@ -4,7 +4,8 @@
   "info": {
     "singularName": "survey-question",
     "pluralName": "survey-questions",
-    "displayName": "SurveyQuestion"
+    "displayName": "SurveyQuestion",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -31,14 +32,6 @@
         }
       },
       "type": "text"
-    },
-    "published": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "datetime"
     },
     "survey_question_freetext": {
       "type": "relation",
