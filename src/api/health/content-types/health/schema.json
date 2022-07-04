@@ -21,20 +21,10 @@
       "relation": "oneToMany",
       "target": "api::offering.offering"
     },
-    "survey_question_freetexts": {
+    "survey_questions": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::survey-question-freetext.survey-question-freetext"
-    },
-    "survey_question_ranges": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::survey-question-range.survey-question-range"
-    },
-    "survey_question_selects": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::survey-question-select.survey-question-select"
+      "target": "api::survey-question.survey-question"
     }
   }
 }
