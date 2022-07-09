@@ -4,23 +4,16 @@
   "info": {
     "singularName": "survey-response-freetext",
     "pluralName": "survey-response-freetexts",
-    "displayName": "SurveyResponseFreetext"
+    "displayName": "SurveyResponseFreetext",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": true
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
     "response": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": {},
       "type": "string",
       "required": true
     }

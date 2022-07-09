@@ -4,32 +4,21 @@
   "info": {
     "singularName": "survey-question-select-choice",
     "pluralName": "survey-question-select-choices",
-    "displayName": "SurveyQuestionSelectChoice"
+    "displayName": "SurveyQuestionSelectChoice",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": true
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
     "choiceText": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": {},
       "type": "string",
       "required": true
     },
     "choiceDescription": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": {},
       "type": "text"
     }
   }
