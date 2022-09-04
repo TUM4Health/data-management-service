@@ -14,9 +14,9 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       NODE_ENV: ${NODE_ENV}
-      VIRTUAL_HOST: strapi.zagar.dev
+      VIRTUAL_HOST: zagar.dev
       VIRTUAL_PORT: 1337
-      LETSENCRYPT_HOST: strapi.zagar.dev
+      LETSENCRYPT_HOST: zagar.dev
       LETSENCRYPT_EMAIL: p@zagar.dev
     links:
       - postgres:postgres
@@ -64,9 +64,11 @@ services:
       ENABLE_IPV6: true
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - certs:/etc/nginx/certs
-      - vhost:/etc/nginx/vhost.d
-      - html:/usr/share/nginx/html
+      - ./certs:/etc/nginx/certs
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+    depends_on:
+      - strapi
     networks:
       - strapi
 
@@ -78,7 +80,7 @@ services:
       - DEFAULT_EMAIL=p@zagar.dev
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - acme:/etc/acme.sh
+      - ./acme:/etc/acme.sh
     volumes_from:
       - nginx-proxy:rw
     depends_on:
