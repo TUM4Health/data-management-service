@@ -50,20 +50,6 @@
       "relation": "oneToOne",
       "target": "api::survey-question-select.survey-question-select",
       "mappedBy": "survey_question"
-    },
-    "type": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "enumeration",
-      "enum": [
-        "freetext",
-        "range",
-        "select"
-      ],
-      "required": true
     }
   }
 }

@@ -4,13 +4,16 @@
   "info": {
     "singularName": "survey-response-select",
     "pluralName": "survey-response-selects",
-    "displayName": "SurveyResponseSelect",
-    "description": ""
+    "displayName": "SurveyResponseSelect"
   },
   "options": {
-    "draftAndPublish": false
+    "draftAndPublish": true
   },
-  "pluginOptions": {},
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
   "attributes": {
     "survey_question_select_choices": {
       "type": "relation",

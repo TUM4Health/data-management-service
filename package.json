@@ -9,7 +9,6 @@
     "build": "strapi build",
     "install-documentation": "strapi install documentation",
     "strapi": "strapi",
-    "strapi-console": "strapi console",
     "lint": "npx eslint .",
     "lint-fix": "npx eslint . --fix"
   },
