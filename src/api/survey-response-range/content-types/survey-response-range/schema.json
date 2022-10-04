@@ -4,23 +4,16 @@
   "info": {
     "singularName": "survey-response-range",
     "pluralName": "survey-response-ranges",
-    "displayName": "SurveyResponseRange"
+    "displayName": "SurveyResponseRange",
+    "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
-  "pluginOptions": {
-    "i18n": {
-      "localized": true
-    }
-  },
+  "pluginOptions": {},
   "attributes": {
     "response": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
+      "pluginOptions": {},
       "type": "integer",
       "required": true
     }

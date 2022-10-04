@@ -77,14 +77,6 @@
         }
       }
     },
-    "tags": {
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "type": "json"
-    },
     "date": {
       "pluginOptions": {
         "i18n": {
@@ -93,6 +85,14 @@
       },
       "type": "date",
       "required": true
+    },
+    "tags": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
     }
   }
 }
