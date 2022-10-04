@@ -17,7 +17,7 @@
     "@strapi/plugin-documentation": "4.2.2",
     "@strapi/plugin-i18n": "4.2.2",
     "@strapi/plugin-users-permissions": "4.2.2",
-    "@strapi/strapi": "4.2.2",
+    "@strapi/strapi": "4.4.1",
     "async-mutex": "^0.3.2",
     "axios-retry": "^3.2.5",
     "better-sqlite3": "7.4.6",
