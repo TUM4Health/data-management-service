@@ -1,5 +1,5 @@
 {
-  "/survey-question-selects": {
+  "/calendar-events": {
     "get": {
       "responses": {
         "200": {
@@ -7,7 +7,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SurveyQuestionSelectListResponse"
+                "$ref": "#/components/schemas/CalendarEventListResponse"
               }
             }
           }
@@ -64,7 +64,7 @@
         }
       },
       "tags": [
-        "Survey-question-select"
+        "Calendar-event"
       ],
       "parameters": [
         {
@@ -148,7 +148,7 @@
           }
         }
       ],
-      "operationId": "get/survey-question-selects"
+      "operationId": "get/calendar-events"
     },
     "post": {
       "responses": {
@@ -157,7 +157,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SurveyQuestionSelectResponse"
+                "$ref": "#/components/schemas/CalendarEventResponse"
               }
             }
           }
@@ -214,23 +214,23 @@
         }
       },
       "tags": [
-        "Survey-question-select"
+        "Calendar-event"
       ],
       "parameters": [],
-      "operationId": "post/survey-question-selects",
+      "operationId": "post/calendar-events",
       "requestBody": {
         "required": true,
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SurveyQuestionSelectRequest"
+              "$ref": "#/components/schemas/CalendarEventRequest"
             }
           }
         }
       }
     }
   },
-  "/survey-question-selects/{id}": {
+  "/calendar-events/{id}": {
     "get": {
       "responses": {
         "200": {
@@ -238,7 +238,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SurveyQuestionSelectResponse"
+                "$ref": "#/components/schemas/CalendarEventResponse"
               }
             }
           }
@@ -295,7 +295,7 @@
         }
       },
       "tags": [
-        "Survey-question-select"
+        "Calendar-event"
       ],
       "parameters": [
         {
@@ -309,7 +309,7 @@
           }
         }
       ],
-      "operationId": "get/survey-question-selects/{id}"
+      "operationId": "get/calendar-events/{id}"
     },
     "put": {
       "responses": {
@@ -318,7 +318,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SurveyQuestionSelectResponse"
+                "$ref": "#/components/schemas/CalendarEventResponse"
               }
             }
           }
@@ -375,7 +375,7 @@
         }
       },
       "tags": [
-        "Survey-question-select"
+        "Calendar-event"
       ],
       "parameters": [
         {
@@ -389,13 +389,13 @@
           }
         }
       ],
-      "operationId": "put/survey-question-selects/{id}",
+      "operationId": "put/calendar-events/{id}",
       "requestBody": {
         "required": true,
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SurveyQuestionSelectRequest"
+              "$ref": "#/components/schemas/CalendarEventRequest"
             }
           }
         }
@@ -466,7 +466,7 @@
         }
       },
       "tags": [
-        "Survey-question-select"
+        "Calendar-event"
       ],
       "parameters": [
         {
@@ -480,7 +480,99 @@
           }
         }
       ],
-      "operationId": "delete/survey-question-selects/{id}"
+      "operationId": "delete/calendar-events/{id}"
+    }
+  },
+  "/calendar-events/{id}/localizations": {
+    "post": {
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalendarEventLocalizationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Bad Request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Unauthorized",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          }
+        },
+        "403": {
+          "description": "Forbidden",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          }
+        },
+        "404": {
+          "description": "Not Found",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal Server Error",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Error"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "Calendar-event"
+      ],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "description": "",
+          "deprecated": false,
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "operationId": "post/calendar-events/{id}/localizations",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CalendarEventLocalizationRequest"
+            }
+          }
+        }
+      }
     }
   }
 }
