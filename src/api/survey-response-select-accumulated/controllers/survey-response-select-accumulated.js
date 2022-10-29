@@ -25,6 +25,7 @@ module.exports = {
       if (!surveyResponseId) {
         ctx.body = { error: "No question or response object found!" };
         next();
+        return;
       }
 
       // Get all possible select options
@@ -39,6 +40,7 @@ module.exports = {
       if (!surveyResponseSelect || surveyResponseSelect.length === 0) {
         ctx.body = { error: "No response select objects found!" };
         next();
+        return;
       }
 
       // Construct all choices with count 0
@@ -50,6 +52,7 @@ module.exports = {
       if (surveyResponseAllChoices === {}) {
         ctx.body = { error: "No response choice objects found!" };
         next();
+        return;
       }
 
       // Count the number of times each choice is selected
@@ -68,52 +71,4 @@ module.exports = {
       ctx.body = err;
     }
   },
-
-  // Function to delete all survey select questions, responses as well as relationships
-  deleteAllSurveySelects: async (ctx, next) => {
-    try {
-      const { surveyId } = ctx.request.query;
-
-      // Delete the survey select question
-      const surveyQuestionSelect = await strapi.entityService.delete(
-        "api::survey-question-select.survey-question-select",
-        surveyId,
-        {
-          populate: '*'
-        }
-      );
-
-      // Delete the survey question
-      await strapi.entityService.delete(
-        "api::survey-question.survey-question",
-        surveyQuestionSelect?.survey_question?.id
-      );
-
-      let deleteCount = 0;
-
-      // Delete the survey response selects
-      for await (const responseSelect of surveyQuestionSelect?.survey_response_selects) {
-        await strapi.entityService.delete(
-          "api::survey-response-select.survey-response-select",
-          responseSelect.id
-        );
-
-        deleteCount++;
-      }
-
-      // Delete the survey response select choices
-      for await (const qestionSelectChoice of surveyQuestionSelect?.survey_question_select_choices) {
-        await strapi.entityService.delete(
-          "api::survey-question-select-choice.survey-question-select-choice",
-          qestionSelectChoice.id
-        );
-
-        deleteCount++;
-      }
-
-      ctx.body = { "sucess": true, "message": `Deleted ${deleteCount + 2} entries` };
-    } catch (err) {
-      ctx.body = err;
-    }
-  }
 };

@@ -9,15 +9,5 @@ module.exports = {
         middlewares: [],
       },
     },
-
-    {
-      method: 'DELETE',
-      path: '/survey-select-delete',
-      handler: 'survey-response-select-accumulated.deleteAllSurveySelects',
-      config: {
-        policies: [],
-        middlewares: [],
-      },
-    },
   ],
 };
